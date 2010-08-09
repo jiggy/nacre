@@ -12,7 +12,6 @@
           <string>WEB-INF/classes/com/nacre/service/vo/FormVO$Field.class</string>
           <string>WEB-INF/classes/com/nacre/service/vo/FormVO.class</string>
           <string>WEB-INF/classes/com/nacre/servlet/FormServlet.class</string>
-          <string>WEB-INF/classes/test.xsd</string>
           <string>WEB-INF/classes/webapp/index.jsp</string>
           <string>WEB-INF/classes/webapp/WEB-INF/web.xml</string>
           <string>WEB-INF/lib/xsom-20070515.jar</string>
