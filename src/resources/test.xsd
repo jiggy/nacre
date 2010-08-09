@@ -2,20 +2,23 @@
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://www.nacre.com/test"
 	xmlns:tns="http://www.nacre.com/test" elementFormDefault="qualified">
-	
 	<simpleType name="Author">
 		<restriction base="string">
 			<maxLength value="40" />
 		</restriction>
 	</simpleType>
-
     <complexType name="Article">
     	<sequence>
-    		<element name="headline" type="string" maxOccurs="1" minOccurs="1" />
+    		<element name="headline" type="string" maxOccurs="1" minOccurs="1">
+    			<simpleType>
+    				<restriction base="string">
+    					<maxLength value="80" />
+    				</restriction>
+    			</simpleType>
+    		</element>
     		<element name="body" type="string" />
     		<element name="publishedOn" type="dateTime" />
     		<element name="author" type="tns:Author" minOccurs="1" maxOccurs="5"/>
     	</sequence>
     </complexType>
-    
 </schema>

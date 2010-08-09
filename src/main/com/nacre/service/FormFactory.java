@@ -83,13 +83,16 @@ public class FormFactory
 		}
 		if (type != null && type.isRestriction()) {
 			XSRestrictionSimpleType restriction = type.asRestriction();
-			System.out.println("\t\t restriction " + name + ", " + restriction.getDeclaredFacets().size());
-			for (XSFacet facet : restriction.getDeclaredFacets(XSFacet.FACET_PATTERN)) {
-				System.out.println("\t\t\t facet: " + facet.getValue());
-			}
+			getRestriction(restriction);
 		} else {
 			System.out.println("No simple type named " + name);
 		}
+	}
+	public void getRestriction(XSRestrictionSimpleType restriction) {
+		System.out.println("\t\t restriction " + restriction.getName() + ", base " + restriction.getBaseType().getName() + ", facets: " + restriction.getDeclaredFacets().size());
+		for (XSFacet facet : restriction.getDeclaredFacets(XSFacet.FACET_MAXLENGTH)) {
+			System.out.println("\t\t\t facet: " + facet.getValue());
+		}		
 	}
 	public void foo() {
 		Iterator<XSSchema> schemas = parsed.iterateSchema();
@@ -143,8 +146,10 @@ public class FormFactory
 	}
 	private Field parseElement(XSElementDecl elem) {
 		Field field = new Field();
-		System.out.println("\telem " + elem.getName() + " " + elem.getType().getName());
-		if (!elem.getType().getTargetNamespace().equals("http://www.w3.org/2001/XMLSchema")) {
+		System.out.println("\telem " + elem.getName() + " " + elem.getType().getName() + " restriction? " + elem.getType().asSimpleType().isRestriction());
+		if (elem.getType().getName() == null) {
+			getRestriction(elem.getType().asSimpleType().asRestriction());
+		} else if (!elem.getType().getTargetNamespace().equals("http://www.w3.org/2001/XMLSchema")) {
 			getComplexType(elem.getType().getName());
 			getSimpleType(elem.getType().getName());
 		}

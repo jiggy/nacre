@@ -4,9 +4,11 @@
 
 <web-app>
 	<display-name>Archetype Created Web Application</display-name>
-	<listener>
-	    <listener-class>org.apache.tiles.web.startup.simple.SimpleTilesListener</listener-class>
-	</listener>
+	<servlet>
+	    <servlet-name>tiles</servlet-name>
+	    <servlet-class>com.nacre.servlet.NacresTilesInitializerServlet</servlet-class>
+	    <load-on-startup>2</load-on-startup>
+	</servlet>
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 		<welcome-file>index.html</welcome-file>

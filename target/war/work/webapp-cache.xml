@@ -12,12 +12,19 @@
           <string>WEB-INF/classes/com/nacre/service/vo/FormVO$Field.class</string>
           <string>WEB-INF/classes/com/nacre/service/vo/FormVO.class</string>
           <string>WEB-INF/classes/com/nacre/servlet/FormServlet.class</string>
+          <string>WEB-INF/classes/com/nacre/servlet/NacresTilesInitializerServlet$NacreTilesContainerFactory.class</string>
+          <string>WEB-INF/classes/com/nacre/servlet/NacresTilesInitializerServlet$NacreTilesInitializer.class</string>
+          <string>WEB-INF/classes/com/nacre/servlet/NacresTilesInitializerServlet.class</string>
+          <string>WEB-INF/classes/test.xsd</string>
           <string>WEB-INF/classes/webapp/index.jsp</string>
           <string>WEB-INF/classes/webapp/WEB-INF/web.xml</string>
           <string>WEB-INF/lib/xsom-20070515.jar</string>
           <string>WEB-INF/lib/relaxngDatatype-1.0.jar</string>
           <string>WEB-INF/lib/servlet-api-2.4.jar</string>
           <string>WEB-INF/lib/commons-io-1.4.jar</string>
+          <string>WEB-INF/lib/slf4j-log4j12-1.6.1.jar</string>
+          <string>WEB-INF/lib/slf4j-api-1.6.1.jar</string>
+          <string>WEB-INF/lib/log4j-1.2.16.jar</string>
           <string>WEB-INF/lib/commons-lang-2.4.jar</string>
           <string>WEB-INF/lib/tiles-jsp-2.2.2.jar</string>
           <string>WEB-INF/lib/tiles-servlet-2.2.2.jar</string>
@@ -26,8 +33,8 @@
           <string>WEB-INF/lib/commons-digester-2.0.jar</string>
           <string>WEB-INF/lib/commons-beanutils-1.8.0.jar</string>
           <string>WEB-INF/lib/jcl-over-slf4j-1.5.8.jar</string>
-          <string>WEB-INF/lib/slf4j-api-1.5.8.jar</string>
           <string>WEB-INF/lib/tiles-template-2.2.2.jar</string>
+          <string>WEB-INF/lib/commons-logging-1.1.1.jar</string>
         </pathsSet>
       </path-set>
     </entry>
@@ -82,6 +89,18 @@
     </org.apache.maven.plugin.war.util.DependencyInfo>
     <org.apache.maven.plugin.war.util.DependencyInfo>
       <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-log4j12</artifactId>
+        <version>1.6.1</version>
+        <type>jar</type>
+        <scope>compile</scope>
+        <exclusions/>
+        <optional>false</optional>
+      </dependency>
+      <targetFileName>slf4j-log4j12-1.6.1.jar</targetFileName>
+    </org.apache.maven.plugin.war.util.DependencyInfo>
+    <org.apache.maven.plugin.war.util.DependencyInfo>
+      <dependency>
         <groupId>commons-lang</groupId>
         <artifactId>commons-lang</artifactId>
         <version>2.4</version>
@@ -103,6 +122,30 @@
         <optional>false</optional>
       </dependency>
       <targetFileName>tiles-jsp-2.2.2.jar</targetFileName>
+    </org.apache.maven.plugin.war.util.DependencyInfo>
+    <org.apache.maven.plugin.war.util.DependencyInfo>
+      <dependency>
+        <groupId>commons-logging</groupId>
+        <artifactId>commons-logging</artifactId>
+        <version>1.1.1</version>
+        <type>jar</type>
+        <scope>compile</scope>
+        <exclusions/>
+        <optional>false</optional>
+      </dependency>
+      <targetFileName>commons-logging-1.1.1.jar</targetFileName>
+    </org.apache.maven.plugin.war.util.DependencyInfo>
+    <org.apache.maven.plugin.war.util.DependencyInfo>
+      <dependency>
+        <groupId>commons-beanutils</groupId>
+        <artifactId>commons-beanutils</artifactId>
+        <version>1.8.0</version>
+        <type>jar</type>
+        <scope>compile</scope>
+        <exclusions/>
+        <optional>false</optional>
+      </dependency>
+      <targetFileName>commons-beanutils-1.8.0.jar</targetFileName>
     </org.apache.maven.plugin.war.util.DependencyInfo>
   </dependenciesInfo>
 </webapp-structure>
