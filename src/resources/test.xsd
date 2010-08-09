@@ -5,7 +5,7 @@
 	
 	<simpleType name="Author">
 		<restriction base="string">
-			<maxLength value="60" />
+			<maxLength value="40" />
 		</restriction>
 	</simpleType>
 
