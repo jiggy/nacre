@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false" threshold="all">
+    <appender name="STDOUT" class="org.apache.log4j.ConsoleAppender">
+        <param name="DatePattern" value="'.'yyyy-MM-dd"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{[M/d/yy HH:mm:ss:SSS z]} %-5p [%t] %c : %m%n"/>
+        </layout>
+    </appender>
+    
+    <appender name="SOCKET" class="org.apache.log4j.net.SocketHubAppender">
+        <param name="Port" value="4560"/>
+        <param name="LocationInfo" value="false"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{[M/d/yy HH:mm:ss:SSS z]} %-5p [%t]  %c : %m%n"/>
+        </layout>
+    </appender>
+    
+    <appender name="LOGFILE" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="/temp/logs/nacre.log" />
+        <param name="Append" value="true"/>
+        <param name="DatePattern" value="'.'yyyy-MM-dd"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{[M/d/yy HH:mm:ss:SSS z]} %-5p [%t]  %c : %m%n"/>
+        </layout>
+    </appender>
+    
+    <appender name="ERRORFILE" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="/temp/logs/nacre-error.log" />
+        <param name="Append" value="true"/>
+        <param name="DatePattern" value="'.'yyyy-MM-dd"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{[M/d/yy HH:mm:ss:SSS z]} %-5p [%t]  %c : %m%n"/>
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="WARN"/>
+        </filter>
+    </appender>
+    
+    <appender name="ASYNC" class="org.apache.log4j.AsyncAppender">
+        <appender-ref ref="ERRORFILE"/>
+        <appender-ref ref="LOGFILE"/>
+        <appender-ref ref="SOCKET"/>
+        <appender-ref ref="STDOUT"/>
+    </appender>
+    
+    <logger name="com.mbusa">
+        <level value="DEBUG"/>
+    </logger>
+    
+    <root>
+        <priority value ="INFO" />
+        <appender-ref ref="ASYNC" />
+    </root>
+</log4j:configuration>

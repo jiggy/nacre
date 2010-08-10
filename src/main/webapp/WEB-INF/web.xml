@@ -4,11 +4,21 @@
 
 <web-app>
 	<display-name>Archetype Created Web Application</display-name>
+	<context-param>
+		<param-name>log4jConfigLocation</param-name>
+		<param-value>classpath:logging/log4j.xml</param-value>
+	</context-param>
+	<listener>
+	    <listener-class>org.apache.tiles.extras.complete.CompleteAutoloadTilesListener</listener-class>
+	</listener>
 	<servlet>
-	    <servlet-name>tiles</servlet-name>
-	    <servlet-class>com.nacre.servlet.NacresTilesInitializerServlet</servlet-class>
-	    <load-on-startup>2</load-on-startup>
+	    <servlet-name>Tiles Dispatch Servlet</servlet-name>
+	    <servlet-class>org.apache.tiles.web.util.TilesDispatchServlet</servlet-class>
 	</servlet>
+	<servlet-mapping>
+	    <servlet-name>Tiles Dispatch Servlet</servlet-name>
+	    <url-pattern>*.tiles</url-pattern>
+	</servlet-mapping>
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 		<welcome-file>index.html</welcome-file>

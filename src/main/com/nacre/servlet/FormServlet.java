@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.tiles.TilesContainer;
+import org.apache.tiles.servlet.context.ServletUtil;
 import org.xml.sax.SAXException;
 
 import com.nacre.service.FormFactory;
@@ -28,5 +30,8 @@ public class FormServlet extends HttpServlet {
 			e.printStackTrace();
 			throw new ServletException(e);
 		}
+		TilesContainer container = ServletUtil.getContainer(
+		        request.getSession().getServletContext());
+		container.render("nacre.doodad", request, response);
 	}
 }
