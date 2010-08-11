@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Iterator;
 
 import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
@@ -29,6 +28,7 @@ import com.sun.xml.xsom.parser.XSOMParser;
 
 public class FormFactory
 {
+	private static final String XSD_NAMESPACE = "http://www.w3.org/2001/XMLSchema";
 	private XSSchemaSet parsed;
 	public FormFactory(URL xsd) throws SAXException {
 		XSOMParser parser = new XSOMParser();
@@ -76,48 +76,36 @@ public class FormFactory
 		}
 		return vo;
 	}
-	public void getSimpleType(String name) {
+	public Field getSimpleType(String name) {
 		XSSimpleType type = null;
 		for (XSSchema schema : parsed.getSchemas()) {
 			type = schema.getSimpleType(name);
 		}
 		if (type != null && type.isRestriction()) {
 			XSRestrictionSimpleType restriction = type.asRestriction();
-			getRestriction(restriction);
+			return getRestriction(restriction);
 		} else {
 			System.out.println("No simple type named " + name);
+			return null;
 		}
 	}
-	public void getRestriction(XSRestrictionSimpleType restriction) {
+	public Field getRestriction(XSRestrictionSimpleType restriction) {
+		Field field = new Field();
 		System.out.println("\t\t restriction " + restriction.getName() + ", base " + restriction.getBaseType().getName() + ", facets: " + restriction.getDeclaredFacets().size());
 		for (XSFacet facet : restriction.getDeclaredFacets(XSFacet.FACET_MAXLENGTH)) {
 			System.out.println("\t\t\t facet: " + facet.getValue());
-		}		
-	}
-	public void foo() {
-		Iterator<XSSchema> schemas = parsed.iterateSchema();
-		while (schemas.hasNext()) {
-			XSSchema schema = schemas.next();
-			if (!schema.getTargetNamespace().equals("http://www.w3.org/2001/XMLSchema")) {
-				System.out.println("tgt namespace: " + schema.getTargetNamespace());
-				for (String simpleTypeName : schema.getSimpleTypes().keySet()) {
-					XSSimpleType type = schema.getSimpleType(simpleTypeName);
-					if (type.isSimpleType()) {
-						System.out.print("simple type: " + simpleTypeName + ", facets: " + type.asRestriction().getDeclaredFacets().size() + " ");
-						for (XSFacet facet : type.asRestriction().getDeclaredFacets()) {
-							System.out.print(facet.getValue() + ",");
-						}
-						System.out.println();
-					}
-				}
-				for (String complexTypeName : schema.getComplexTypes().keySet()) {
-					XSComplexType type = schema.getComplexType(complexTypeName);
-					System.out.println("Complex type : " + complexTypeName);
-					XSParticle particle = type.getContentType().asParticle();
-					parseParticle(particle);
-				}
-			}
+			field.setMaxLength(new Integer(facet.getValue().toString()));
 		}
+		for (XSFacet facet : restriction.getDeclaredFacets(XSFacet.FACET_MINLENGTH)) {
+			System.out.println("\t\t\t facet: " + facet.getValue());
+			field.setMinLength(new Integer(facet.getValue().toString()));
+		}
+		for (XSFacet facet : restriction.getDeclaredFacets(XSFacet.FACET_PATTERN)) {
+			System.out.println("\t\t\t facet: " + facet.getValue());
+			field.setPattern(facet.getValue().toString());
+		}
+		field.setType(restriction.getBaseType().getName());
+		return field;
 	}
 	
 	private FormVO parseParticle(XSParticle particle) {
@@ -146,15 +134,21 @@ public class FormFactory
 	}
 	private Field parseElement(XSElementDecl elem) {
 		Field field = new Field();
-		System.out.println("\telem " + elem.getName() + " " + elem.getType().getName() + " restriction? " + elem.getType().asSimpleType().isRestriction());
+		System.out.println("\telem " + elem.getName() + " " + elem.getType().getName() + " ns: " + elem.getType().getTargetNamespace());
 		if (elem.getType().getName() == null) {
-			getRestriction(elem.getType().asSimpleType().asRestriction());
-		} else if (!elem.getType().getTargetNamespace().equals("http://www.w3.org/2001/XMLSchema")) {
-			getComplexType(elem.getType().getName());
-			getSimpleType(elem.getType().getName());
+			field = getRestriction(elem.getType().asSimpleType().asRestriction());
+		} else if (!elem.getType().getTargetNamespace().equals(XSD_NAMESPACE)) {
+			field.setType(elem.getType().getName());
+			FormVO form = getComplexType(elem.getType().getName());
+			if (form == null) {
+				field = getSimpleType(elem.getType().getName());
+			} else {
+				
+			}
+		} else {
+			field.setType(elem.getType().getName());
 		}
 		field.setName(elem.getName());
-		field.setType(elem.getType().getName());
 		return field;
 	}
 }
