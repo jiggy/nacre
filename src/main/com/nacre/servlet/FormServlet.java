@@ -12,7 +12,7 @@ import org.apache.commons.logging.LogFactory;
 import org.xml.sax.SAXException;
 
 import com.nacre.service.FormFactory;
-import com.nacre.service.vo.FormVO;
+import com.nacre.service.vo.NacreForm;
 
 public class FormServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -35,7 +35,7 @@ public class FormServlet extends HttpServlet {
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
-		FormVO form = formFactory.getComplexType(request.getParameter("type"));
+		NacreForm form = formFactory.getComplexType(request.getParameter("type"));
 		request.setAttribute("form", form);
 		request.getRequestDispatcher("/layouts/nacre.jsp").include(request, response);
 	}

@@ -10,8 +10,13 @@
           <string>WEB-INF/classes/com/nacre/service/FormFactory$1.class</string>
           <string>WEB-INF/classes/com/nacre/service/FormFactory$2.class</string>
           <string>WEB-INF/classes/com/nacre/service/FormFactory.class</string>
+          <string>WEB-INF/classes/com/nacre/service/vo/ComplexType.class</string>
           <string>WEB-INF/classes/com/nacre/service/vo/FormVO$Field.class</string>
           <string>WEB-INF/classes/com/nacre/service/vo/FormVO.class</string>
+          <string>WEB-INF/classes/com/nacre/service/vo/NacreField$FieldType.class</string>
+          <string>WEB-INF/classes/com/nacre/service/vo/NacreField.class</string>
+          <string>WEB-INF/classes/com/nacre/service/vo/NacreForm.class</string>
+          <string>WEB-INF/classes/com/nacre/service/vo/SimpleType.class</string>
           <string>WEB-INF/classes/com/nacre/servlet/FormServlet.class</string>
           <string>WEB-INF/classes/logging/log4j.xml</string>
           <string>WEB-INF/classes/test.xsd</string>

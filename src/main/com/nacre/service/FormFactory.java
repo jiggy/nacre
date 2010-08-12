@@ -13,8 +13,10 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-import com.nacre.service.vo.FormVO;
-import com.nacre.service.vo.FormVO.Field;
+import com.nacre.service.vo.ComplexType;
+import com.nacre.service.vo.NacreForm;
+import com.nacre.service.vo.NacreField;
+import com.nacre.service.vo.SimpleType;
 import com.sun.xml.xsom.XSComplexType;
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSFacet;
@@ -64,8 +66,8 @@ public class FormFactory
 		parser.parse(xsd);
 		parsed = parser.getResult();
 	}
-	public FormVO getComplexType(String name) {
-		FormVO vo = null;
+	public NacreForm getComplexType(String name) {
+		NacreForm vo = null;
 		XSComplexType type = null;
 		for (XSSchema schema : parsed.getSchemas()) {
 			type = schema.getComplexType(name);
@@ -76,7 +78,7 @@ public class FormFactory
 		}
 		return vo;
 	}
-	public Field getSimpleType(String name) {
+	public NacreField getSimpleType(String name) {
 		XSSimpleType type = null;
 		for (XSSchema schema : parsed.getSchemas()) {
 			type = schema.getSimpleType(name);
@@ -89,8 +91,8 @@ public class FormFactory
 			return null;
 		}
 	}
-	public Field getRestriction(XSRestrictionSimpleType restriction) {
-		Field field = new Field();
+	public NacreField getRestriction(XSRestrictionSimpleType restriction) {
+		SimpleType field = new SimpleType();
 		System.out.println("\t\t restriction " + restriction.getName() + ", base " + restriction.getBaseType().getName() + ", facets: " + restriction.getDeclaredFacets().size());
 		for (XSFacet facet : restriction.getDeclaredFacets(XSFacet.FACET_MAXLENGTH)) {
 			System.out.println("\t\t\t facet: " + facet.getValue());
@@ -104,12 +106,12 @@ public class FormFactory
 			System.out.println("\t\t\t facet: " + facet.getValue());
 			field.setPattern(facet.getValue().toString());
 		}
-		field.setType(restriction.getBaseType().getName());
+		field.setBaseType(restriction.getBaseType().getName());
 		return field;
 	}
 	
-	private FormVO parseParticle(XSParticle particle) {
-		FormVO vo = null;
+	private NacreForm parseParticle(XSParticle particle) {
+		NacreForm vo = null;
 		if (particle.getTerm().isModelGroup()) {
 			vo = parseModelGroup(particle.getTerm().asModelGroup());
 		}
@@ -123,30 +125,34 @@ public class FormFactory
 		return vo;
 	}
 	
-	private FormVO parseModelGroup(XSModelGroup group) {
-		FormVO vo = new FormVO();
+	private NacreForm parseModelGroup(XSModelGroup group) {
+		NacreForm vo = new NacreForm();
 		for (XSParticle child : group.getChildren()) {
 			//parseParticle(child);
-			Field field = parseElement(child.getTerm().asElementDecl());
+			NacreField field = parseElement(child.getTerm().asElementDecl());
 			vo.getFields().add(field);
 		}
 		return vo;
 	}
-	private Field parseElement(XSElementDecl elem) {
-		Field field = new Field();
+	private NacreField parseElement(XSElementDecl elem) {
+		NacreField field;
 		System.out.println("\telem " + elem.getName() + " " + elem.getType().getName() + " ns: " + elem.getType().getTargetNamespace());
 		if (elem.getType().getName() == null) {
+			// anonymous restriction
 			field = getRestriction(elem.getType().asSimpleType().asRestriction());
 		} else if (!elem.getType().getTargetNamespace().equals(XSD_NAMESPACE)) {
-			field.setType(elem.getType().getName());
-			FormVO form = getComplexType(elem.getType().getName());
+			// user-defined type
+			//field.setType(elem.getType().getName());
+			NacreForm form = getComplexType(elem.getType().getName());
 			if (form == null) {
 				field = getSimpleType(elem.getType().getName());
 			} else {
-				
+				field = new ComplexType();
 			}
 		} else {
-			field.setType(elem.getType().getName());
+			// simple type, no restriction
+			field = new SimpleType();
+			((SimpleType)field).setBaseType(elem.getType().getName());
 		}
 		field.setName(elem.getName());
 		return field;
