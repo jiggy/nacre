@@ -17,10 +17,9 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import com.nacre.service.vo.ComplexType;
-import com.nacre.service.vo.NacreForm;
-import com.nacre.service.vo.NacreField;
+import com.nacre.service.vo.Decoration;
+import com.nacre.service.vo.Field;
 import com.nacre.service.vo.SimpleType;
-import com.sun.org.apache.xerces.internal.xs.XSAnnotation;
 import com.sun.xml.xsom.XSComplexType;
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSFacet;
@@ -73,7 +72,7 @@ public class FormFactory
 		parser.setAnnotationParser(new AnnotationParserFactory() {
 			public AnnotationParser create() {
 				return new AnnotationParser() {
-					StringBuilder sb = new StringBuilder("");
+					Decoration decoration = new Decoration();
 					@Override
 					public ContentHandler getContentHandler(
 							AnnotationContext ctx, String parent,
@@ -120,7 +119,7 @@ public class FormFactory
 									Attributes atts) throws SAXException {
 								if (uri.equals("http://www.nacre.com/decorations")) {
 									if (localName.equals("label")) {
-										sb.append(atts.getValue("label"));
+										decoration.setLabel(atts.getValue("label"));
 									}
 								}
 							}
@@ -134,7 +133,7 @@ public class FormFactory
 
 					@Override
 					public Object getResult(Object arg0) {
-						return sb.toString();
+						return decoration;
 					}
 					
 				};
@@ -158,8 +157,8 @@ public class FormFactory
 		return vo;
 	}
 
-	private NacreField parseParticle(XSParticle particle) {
-		NacreField vo = null;
+	private Field parseParticle(XSParticle particle) {
+		Field vo = null;
 		if (particle.getTerm().isModelGroup()) {
 			System.out.println("particle is model group");
 			vo = parseModelGroup(particle.getTerm().asModelGroup());
@@ -182,13 +181,13 @@ public class FormFactory
 		System.out.println(group.getChildren().length + " children");
 		for (XSParticle child : group.getChildren()) {
 			System.out.println("child is " + child.getTerm());
-			NacreField field = parseParticle(child);//parseElement(child.getTerm().asElementDecl());
+			Field field = parseParticle(child);//parseElement(child.getTerm().asElementDecl());
 			vo.getFields().add(field);
 		}
 		return vo;
 	}
-	private NacreField parseElement(XSElementDecl elem) {
-		NacreField field;
+	private Field parseElement(XSElementDecl elem) {
+		Field field;
 		System.out.println("\telem " + elem.getName() + " " + elem.getType().getName() + " ns: " + elem.getType().getTargetNamespace());
 		if (elem.getType().getName() == null) {
 			// anonymous restriction
@@ -206,14 +205,13 @@ public class FormFactory
 		}
 		com.sun.xml.xsom.XSAnnotation annotation = elem.getAnnotation();
 		if (annotation != null) {
-			field.setName(annotation.getAnnotation() + "");
-		} else {
-			field.setName(elem.getName());
+			field.setDecoration((Decoration) annotation.getAnnotation());
 		}
+		field.setName(elem.getName());
 		return field;
 	}
 
-	public NacreField getSimpleType(String name) {
+	public Field getSimpleType(String name) {
 		XSSimpleType type = null;
 		for (XSSchema schema : parsed.getSchemas()) {
 			type = schema.getSimpleType(name);
@@ -226,7 +224,7 @@ public class FormFactory
 			return null;
 		}
 	}
-	public NacreField getRestriction(XSRestrictionSimpleType restriction) {
+	public Field getRestriction(XSRestrictionSimpleType restriction) {
 		SimpleType field = new SimpleType();
 		System.out.println("\t\t restriction " + restriction.getName() + ", base " + restriction.getBaseType().getName() + ", facets: " + restriction.getDeclaredFacets().size());
 		for (XSFacet facet : restriction.getDeclaredFacets(XSFacet.FACET_MAXLENGTH)) {

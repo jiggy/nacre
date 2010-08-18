@@ -3,18 +3,18 @@ package com.nacre.service.vo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ComplexType extends NacreField {
+public class ComplexType extends Field {
 	
-	private List<NacreField> fields;
+	private List<Field> fields;
 
-	public List<NacreField> getFields() {
+	public List<Field> getFields() {
 		if (fields == null) {
-			fields = new ArrayList<NacreField>();
+			fields = new ArrayList<Field>();
 		}
 		return fields;
 	}
 
-	public void setFields(List<NacreField> fields) {
+	public void setFields(List<Field> fields) {
 		this.fields = fields;
 	}
 

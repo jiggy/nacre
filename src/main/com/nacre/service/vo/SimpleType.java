@@ -1,6 +1,6 @@
 package com.nacre.service.vo;
 
-public class SimpleType extends NacreField {
+public class SimpleType extends Field {
 	private String baseType;
 	private int maxLength;
 	private int minLength;
