@@ -24,12 +24,18 @@
 	<complexType name="location">
 		<sequence>
 			<element name="country" type="string" />
-			<element name="location" type="string" />
+			<element name="location" type="string">
+				<annotation>
+					<appinfo>
+						<ncr:label label="Location Name" />
+					</appinfo>
+				</annotation>
+			</element>
 		</sequence>
 	</complexType>
     <complexType name="Article">
     	<sequence>
-    		<element name="headline" type="string" maxOccurs="1" minOccurs="1">
+    		<element name="headLine" type="string" maxOccurs="1" minOccurs="1">
     			<simpleType>
     				<restriction base="string">
     					<maxLength value="80" />

@@ -1,6 +1,7 @@
 package com.nacre.servlet;
 
 import java.io.IOException;
+import java.net.URL;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,7 +14,6 @@ import org.xml.sax.SAXException;
 
 import com.nacre.service.FormFactory;
 import com.nacre.service.vo.ComplexType;
-import com.nacre.service.vo.NacreForm;
 
 public class FormServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -24,17 +24,25 @@ public class FormServlet extends HttpServlet {
 
 	@Override
 	public void init() throws ServletException {
+		loadSchema(this.getClass().getResource(this.getInitParameter(XSD)));
+		super.init();
+	}
+
+	private void loadSchema(URL... url) throws ServletException {
 		try {
-			formFactory = new FormFactory(this.getClass().getResource(this.getInitParameter(XSD)));
+			formFactory = new FormFactory(url);
 		} catch (SAXException e) {
 			e.printStackTrace();
 			throw new ServletException(e);
 		}
-		super.init();
 	}
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
+		if ("true".equals(request.getParameter("reload"))) {
+			System.out.println("RELOADING");
+			loadSchema(this.getClass().getResource(this.getInitParameter(XSD)));
+		}
 		ComplexType form = formFactory.getComplexType(request.getParameter("type"));
 		request.setAttribute("form", form);
 		request.getRequestDispatcher("/layouts/nacre.jsp").include(request, response);

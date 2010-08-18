@@ -7,6 +7,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.WordUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.EntityResolver;
@@ -38,7 +40,7 @@ public class FormFactory
 {
 	private static final String XSD_NAMESPACE = "http://www.w3.org/2001/XMLSchema";
 	private XSSchemaSet parsed;
-	public FormFactory(URL xsd) throws SAXException {
+	public FormFactory(URL... xsd) throws SAXException {
 		XSOMParser parser = new XSOMParser();
 		parser.setEntityResolver(new EntityResolver() {
 			public InputSource resolveEntity(String publicId, String systemId)
@@ -139,7 +141,10 @@ public class FormFactory
 				};
 			}
 		});
-		parser.parse(xsd);
+		for (URL schema : xsd) {
+			// TODO check last modified timestamp and only reload if necessary
+			parser.parse(schema);
+		}
 		parsed = parser.getResult();
 	}
 
@@ -206,6 +211,11 @@ public class FormFactory
 		com.sun.xml.xsom.XSAnnotation annotation = elem.getAnnotation();
 		if (annotation != null) {
 			field.setDecoration((Decoration) annotation.getAnnotation());
+		} else {
+			// TODO this should be configurable via schema-level annotation, options for delimiter-base parsing as well
+			Decoration dec = new Decoration();
+			dec.setLabel(WordUtils.capitalize(StringUtils.join(StringUtils.splitByCharacterTypeCamelCase(elem.getName()), " ")));
+			field.setDecoration(dec);
 		}
 		field.setName(elem.getName());
 		return field;
@@ -224,6 +234,7 @@ public class FormFactory
 			return null;
 		}
 	}
+
 	public Field getRestriction(XSRestrictionSimpleType restriction) {
 		SimpleType field = new SimpleType();
 		System.out.println("\t\t restriction " + restriction.getName() + ", base " + restriction.getBaseType().getName() + ", facets: " + restriction.getDeclaredFacets().size());
