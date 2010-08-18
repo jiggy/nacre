@@ -4,7 +4,25 @@
       <string>currentBuild</string>
       <path-set>
         <pathsSet class="linked-hash-set">
+          <string>css/images/ui-bg_diagonals-thick_18_b81900_40x40.png</string>
+          <string>css/images/ui-bg_diagonals-thick_20_666666_40x40.png</string>
+          <string>css/images/ui-bg_flat_10_000000_40x100.png</string>
+          <string>css/images/ui-bg_glass_100_f6f6f6_1x400.png</string>
+          <string>css/images/ui-bg_glass_100_fdf5ce_1x400.png</string>
+          <string>css/images/ui-bg_glass_65_ffffff_1x400.png</string>
+          <string>css/images/ui-bg_gloss-wave_35_f6a828_500x100.png</string>
+          <string>css/images/ui-bg_highlight-soft_100_eeeeee_1x100.png</string>
+          <string>css/images/ui-bg_highlight-soft_75_ffe45c_1x100.png</string>
+          <string>css/images/ui-icons_222222_256x240.png</string>
+          <string>css/images/ui-icons_228ef1_256x240.png</string>
+          <string>css/images/ui-icons_ef8c08_256x240.png</string>
+          <string>css/images/ui-icons_ffd27a_256x240.png</string>
+          <string>css/images/ui-icons_ffffff_256x240.png</string>
+          <string>css/jquery-ui-1.8.4.custom.css</string>
+          <string>css/nacre.css</string>
           <string>index.jsp</string>
+          <string>js/jquery-1.4.2.min.js</string>
+          <string>js/jquery-ui-1.8.4.custom.min.js</string>
           <string>layouts/complexType.jsp</string>
           <string>layouts/date.jsp</string>
           <string>layouts/field.jsp</string>
@@ -14,6 +32,9 @@
           <string>WEB-INF/web.xml</string>
           <string>WEB-INF/classes/com/nacre/service/FormFactory$1.class</string>
           <string>WEB-INF/classes/com/nacre/service/FormFactory$2.class</string>
+          <string>WEB-INF/classes/com/nacre/service/FormFactory$3$1$1.class</string>
+          <string>WEB-INF/classes/com/nacre/service/FormFactory$3$1.class</string>
+          <string>WEB-INF/classes/com/nacre/service/FormFactory$3.class</string>
           <string>WEB-INF/classes/com/nacre/service/FormFactory.class</string>
           <string>WEB-INF/classes/com/nacre/service/vo/ComplexType.class</string>
           <string>WEB-INF/classes/com/nacre/service/vo/FormVO$Field.class</string>
@@ -23,10 +44,29 @@
           <string>WEB-INF/classes/com/nacre/service/vo/NacreForm.class</string>
           <string>WEB-INF/classes/com/nacre/service/vo/SimpleType.class</string>
           <string>WEB-INF/classes/com/nacre/servlet/FormServlet.class</string>
+          <string>WEB-INF/classes/decorations.xsd</string>
           <string>WEB-INF/classes/logging/log4j.xml</string>
           <string>WEB-INF/classes/test.xsd</string>
           <string>WEB-INF/classes/tiles-defs.xml</string>
+          <string>WEB-INF/classes/webapp/css/images/ui-bg_diagonals-thick_18_b81900_40x40.png</string>
+          <string>WEB-INF/classes/webapp/css/images/ui-bg_diagonals-thick_20_666666_40x40.png</string>
+          <string>WEB-INF/classes/webapp/css/images/ui-bg_flat_10_000000_40x100.png</string>
+          <string>WEB-INF/classes/webapp/css/images/ui-bg_glass_100_f6f6f6_1x400.png</string>
+          <string>WEB-INF/classes/webapp/css/images/ui-bg_glass_100_fdf5ce_1x400.png</string>
+          <string>WEB-INF/classes/webapp/css/images/ui-bg_glass_65_ffffff_1x400.png</string>
+          <string>WEB-INF/classes/webapp/css/images/ui-bg_gloss-wave_35_f6a828_500x100.png</string>
+          <string>WEB-INF/classes/webapp/css/images/ui-bg_highlight-soft_100_eeeeee_1x100.png</string>
+          <string>WEB-INF/classes/webapp/css/images/ui-bg_highlight-soft_75_ffe45c_1x100.png</string>
+          <string>WEB-INF/classes/webapp/css/images/ui-icons_222222_256x240.png</string>
+          <string>WEB-INF/classes/webapp/css/images/ui-icons_228ef1_256x240.png</string>
+          <string>WEB-INF/classes/webapp/css/images/ui-icons_ef8c08_256x240.png</string>
+          <string>WEB-INF/classes/webapp/css/images/ui-icons_ffd27a_256x240.png</string>
+          <string>WEB-INF/classes/webapp/css/images/ui-icons_ffffff_256x240.png</string>
+          <string>WEB-INF/classes/webapp/css/jquery-ui-1.8.4.custom.css</string>
+          <string>WEB-INF/classes/webapp/css/nacre.css</string>
           <string>WEB-INF/classes/webapp/index.jsp</string>
+          <string>WEB-INF/classes/webapp/js/jquery-1.4.2.min.js</string>
+          <string>WEB-INF/classes/webapp/js/jquery-ui-1.8.4.custom.min.js</string>
           <string>WEB-INF/classes/webapp/layouts/complexType.jsp</string>
           <string>WEB-INF/classes/webapp/layouts/date.jsp</string>
           <string>WEB-INF/classes/webapp/layouts/field.jsp</string>

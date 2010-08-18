@@ -2,4 +2,4 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
-${field.name} (${field.baseType}): <jsp:include page="${field.baseType}.jsp" />
+<div class="col field-label">${field.name} (${field.baseType})</div><div class="col field-input"><jsp:include page="${field.baseType}.jsp" /></div>

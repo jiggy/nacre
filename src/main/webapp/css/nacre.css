@@ -1,0 +1,15 @@
+div.field-box {
+	border: thin solid black; margin-left: 5px; padding: 5px;
+}
+.field-label {
+	width: 200px;
+	text-align: right;
+}
+.row {
+	display: block;
+	overflow: hidden;
+}
+.col {
+	display: block;
+	float: left;
+}

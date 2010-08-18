@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
-<div style="border: thin solid black; margin-left: 5px; padding: 5px;">
+<div class="field-box row">
 <c:choose>
 	<c:when test="${field.fieldType eq 'SimpleType'}">
 		<jsp:include page="simpleType.jsp" />

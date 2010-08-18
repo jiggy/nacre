@@ -7,9 +7,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import org.xml.sax.Attributes;
+import org.xml.sax.ContentHandler;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
+import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
@@ -17,6 +20,7 @@ import com.nacre.service.vo.ComplexType;
 import com.nacre.service.vo.NacreForm;
 import com.nacre.service.vo.NacreField;
 import com.nacre.service.vo.SimpleType;
+import com.sun.org.apache.xerces.internal.xs.XSAnnotation;
 import com.sun.xml.xsom.XSComplexType;
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSFacet;
@@ -26,6 +30,9 @@ import com.sun.xml.xsom.XSRestrictionSimpleType;
 import com.sun.xml.xsom.XSSchema;
 import com.sun.xml.xsom.XSSchemaSet;
 import com.sun.xml.xsom.XSSimpleType;
+import com.sun.xml.xsom.parser.AnnotationContext;
+import com.sun.xml.xsom.parser.AnnotationParser;
+import com.sun.xml.xsom.parser.AnnotationParserFactory;
 import com.sun.xml.xsom.parser.XSOMParser;
 
 public class FormFactory
@@ -61,6 +68,76 @@ public class FormFactory
 			private void log(SAXParseException exception) {
 				System.out.println(exception.getMessage());
 				exception.printStackTrace();
+			}
+		});
+		parser.setAnnotationParser(new AnnotationParserFactory() {
+			public AnnotationParser create() {
+				return new AnnotationParser() {
+					StringBuilder sb = new StringBuilder("");
+					@Override
+					public ContentHandler getContentHandler(
+							AnnotationContext ctx, String parent,
+							ErrorHandler errorHandler, EntityResolver entityResolver) {
+						System.out.println("got an annotation, parent [" + parent + "] type [" + ctx.toString() + "]");
+						return new ContentHandler() {
+
+							public void characters(char[] ch, int start,
+									int length) throws SAXException {
+							}
+
+							public void endDocument() throws SAXException {
+							}
+
+							public void endElement(String uri,
+									String localName, String qName)
+									throws SAXException {
+							}
+
+							public void endPrefixMapping(String prefix)
+									throws SAXException {
+							}
+
+							public void ignorableWhitespace(char[] ch,
+									int start, int length) throws SAXException {
+							}
+
+							public void processingInstruction(String target,
+									String data) throws SAXException {
+							}
+
+							public void setDocumentLocator(Locator locator) {
+							}
+
+							public void skippedEntity(String name)
+									throws SAXException {
+							}
+
+							public void startDocument() throws SAXException {
+							}
+
+							public void startElement(String uri,
+									String localName, String qName,
+									Attributes atts) throws SAXException {
+								if (uri.equals("http://www.nacre.com/decorations")) {
+									if (localName.equals("label")) {
+										sb.append(atts.getValue("label"));
+									}
+								}
+							}
+
+							public void startPrefixMapping(String prefix,
+									String uri) throws SAXException {
+							}
+							
+						};
+					}
+
+					@Override
+					public Object getResult(Object arg0) {
+						return sb.toString();
+					}
+					
+				};
 			}
 		});
 		parser.parse(xsd);
@@ -127,7 +204,12 @@ public class FormFactory
 			field = new SimpleType();
 			((SimpleType)field).setBaseType(elem.getType().getName());
 		}
-		field.setName(elem.getName());
+		com.sun.xml.xsom.XSAnnotation annotation = elem.getAnnotation();
+		if (annotation != null) {
+			field.setName(annotation.getAnnotation() + "");
+		} else {
+			field.setName(elem.getName());
+		}
 		return field;
 	}
 
