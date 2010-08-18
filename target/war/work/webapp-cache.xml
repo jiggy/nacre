@@ -6,9 +6,11 @@
         <pathsSet class="linked-hash-set">
           <string>index.jsp</string>
           <string>layouts/complexType.jsp</string>
+          <string>layouts/date.jsp</string>
           <string>layouts/field.jsp</string>
           <string>layouts/nacre.jsp</string>
           <string>layouts/simpleType.jsp</string>
+          <string>layouts/string.jsp</string>
           <string>WEB-INF/web.xml</string>
           <string>WEB-INF/classes/com/nacre/service/FormFactory$1.class</string>
           <string>WEB-INF/classes/com/nacre/service/FormFactory$2.class</string>
@@ -26,9 +28,11 @@
           <string>WEB-INF/classes/tiles-defs.xml</string>
           <string>WEB-INF/classes/webapp/index.jsp</string>
           <string>WEB-INF/classes/webapp/layouts/complexType.jsp</string>
+          <string>WEB-INF/classes/webapp/layouts/date.jsp</string>
           <string>WEB-INF/classes/webapp/layouts/field.jsp</string>
           <string>WEB-INF/classes/webapp/layouts/nacre.jsp</string>
           <string>WEB-INF/classes/webapp/layouts/simpleType.jsp</string>
+          <string>WEB-INF/classes/webapp/layouts/string.jsp</string>
           <string>WEB-INF/classes/webapp/WEB-INF/web.xml</string>
           <string>WEB-INF/lib/xsom-20070515.jar</string>
           <string>WEB-INF/lib/relaxngDatatype-1.0.jar</string>
