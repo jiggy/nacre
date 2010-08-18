@@ -4,8 +4,17 @@ import java.util.ArrayList;
 
 import java.util.List;
 
-public class Form extends ComplexType {
+public class Form {
 	private List<FormAction> actions;
+	private ComplexType form;
+
+	public ComplexType getForm() {
+		return form;
+	}
+
+	public void setForm(ComplexType form) {
+		this.form = form;
+	}
 
 	public List<FormAction> getActions() {
 		if (actions == null) {

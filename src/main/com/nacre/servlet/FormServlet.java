@@ -13,7 +13,7 @@ import org.apache.commons.logging.LogFactory;
 import org.xml.sax.SAXException;
 
 import com.nacre.service.FormFactory;
-import com.nacre.service.vo.ComplexType;
+import com.nacre.service.vo.Form;
 
 public class FormServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -43,7 +43,7 @@ public class FormServlet extends HttpServlet {
 			System.out.println("RELOADING");
 			loadSchema(this.getClass().getResource(this.getInitParameter(XSD)));
 		}
-		ComplexType form = formFactory.getComplexType(request.getParameter("type"));
+		Form form = formFactory.getForm(request.getParameter("type"));
 		request.setAttribute("form", form);
 		request.getRequestDispatcher("/layouts/nacre.jsp").include(request, response);
 	}

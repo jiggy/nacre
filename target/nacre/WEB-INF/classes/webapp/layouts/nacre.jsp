@@ -14,7 +14,10 @@
 <script type="text/javascript" src="${cp}/js/jquery-ui-1.8.4.custom.min.js"></script>
 </head>
 <body>
-<c:forEach items="${form.fields}" var="field" varStatus="stat">
+<c:forEach items="${form.actions}" var="action">
+	<a href="${action.uri}">${action.label}</a><br />
+</c:forEach>
+<c:forEach items="${form.form.fields}" var="field">
 	<c:set var="field" value="${field}" scope="request" />
 	<c:set var="path" value="nacredoc-" scope="request" />
 	<jsp:include page="field.jsp" />

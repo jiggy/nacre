@@ -21,6 +21,8 @@ import org.xml.sax.SAXParseException;
 import com.nacre.service.vo.ComplexType;
 import com.nacre.service.vo.Decoration;
 import com.nacre.service.vo.Field;
+import com.nacre.service.vo.Form;
+import com.nacre.service.vo.FormAction;
 import com.nacre.service.vo.SimpleType;
 import com.sun.xml.xsom.XSComplexType;
 import com.sun.xml.xsom.XSElementDecl;
@@ -148,6 +150,16 @@ public class FormFactory
 		parsed = parser.getResult();
 	}
 
+	public Form getForm(String name) {
+		Form form = new Form();
+		form.setForm(getComplexType(name));
+		FormAction saveAction = new FormAction();
+		saveAction.setLabel("Save");
+		saveAction.setUri("/save");
+		form.getActions().add(saveAction);
+		return form;
+	}
+	
 	public ComplexType getComplexType(String name) {
 		System.out.println("Getting form " + name);
 		ComplexType vo = null;
@@ -235,7 +247,7 @@ public class FormFactory
 		}
 	}
 
-	public Field getRestriction(XSRestrictionSimpleType restriction) {
+	private Field getRestriction(XSRestrictionSimpleType restriction) {
 		SimpleType field = new SimpleType();
 		System.out.println("\t\t restriction " + restriction.getName() + ", base " + restriction.getBaseType().getName() + ", facets: " + restriction.getDeclaredFacets().size());
 		for (XSFacet facet : restriction.getDeclaredFacets(XSFacet.FACET_MAXLENGTH)) {
