@@ -66,18 +66,71 @@ public class FormFactory
 		parser.parse(xsd);
 		parsed = parser.getResult();
 	}
-	public NacreForm getComplexType(String name) {
-		NacreForm vo = null;
+
+	public ComplexType getComplexType(String name) {
+		System.out.println("Getting form " + name);
+		ComplexType vo = null;
 		XSComplexType type = null;
 		for (XSSchema schema : parsed.getSchemas()) {
 			type = schema.getComplexType(name);
 		}
 		if (type != null && type.getContentType() != null) {
 			XSParticle particle = type.getContentType().asParticle();
-			vo = parseParticle(particle);
+			vo = parseModelGroup(particle.getTerm().asModelGroup());
 		}
 		return vo;
 	}
+
+	private NacreField parseParticle(XSParticle particle) {
+		NacreField vo = null;
+		if (particle.getTerm().isModelGroup()) {
+			System.out.println("particle is model group");
+			vo = parseModelGroup(particle.getTerm().asModelGroup());
+		}
+		else if (particle.getTerm().isElementDecl()) {
+			System.out.println("particle is element decl");
+			vo = parseElement(particle.getTerm().asElementDecl());
+		} else if (particle.getTerm().isModelGroupDecl()) {
+			System.out.println("particle is model group decl");
+			vo = parseModelGroup(particle.getTerm().asModelGroupDecl().getModelGroup());
+		} else if (particle.getTerm().isWildcard()) {
+			System.out.println("particle is wildcard");
+			// ????
+		}
+		return vo;
+	}
+	
+	private ComplexType parseModelGroup(XSModelGroup group) {
+		ComplexType vo = new ComplexType();
+		System.out.println(group.getChildren().length + " children");
+		for (XSParticle child : group.getChildren()) {
+			System.out.println("child is " + child.getTerm());
+			NacreField field = parseParticle(child);//parseElement(child.getTerm().asElementDecl());
+			vo.getFields().add(field);
+		}
+		return vo;
+	}
+	private NacreField parseElement(XSElementDecl elem) {
+		NacreField field;
+		System.out.println("\telem " + elem.getName() + " " + elem.getType().getName() + " ns: " + elem.getType().getTargetNamespace());
+		if (elem.getType().getName() == null) {
+			// anonymous restriction
+			field = getRestriction(elem.getType().asSimpleType().asRestriction());
+		} else if (!elem.getType().getTargetNamespace().equals(XSD_NAMESPACE)) {
+			// user-defined type
+			field = getComplexType(elem.getType().getName());
+			if (field == null) {
+				field = getSimpleType(elem.getType().getName());
+			}
+		} else {
+			// simple type, no restriction
+			field = new SimpleType();
+			((SimpleType)field).setBaseType(elem.getType().getName());
+		}
+		field.setName(elem.getName());
+		return field;
+	}
+
 	public NacreField getSimpleType(String name) {
 		XSSimpleType type = null;
 		for (XSSchema schema : parsed.getSchemas()) {
@@ -110,51 +163,4 @@ public class FormFactory
 		return field;
 	}
 	
-	private NacreForm parseParticle(XSParticle particle) {
-		NacreForm vo = null;
-		if (particle.getTerm().isModelGroup()) {
-			vo = parseModelGroup(particle.getTerm().asModelGroup());
-		}
-		else if (particle.getTerm().isElementDecl()) {
-			parseElement(particle.getTerm().asElementDecl());
-		} else if (particle.getTerm().isModelGroupDecl()) {
-			// ????
-		} else if (particle.getTerm().isWildcard()) {
-			// ????
-		}
-		return vo;
-	}
-	
-	private NacreForm parseModelGroup(XSModelGroup group) {
-		NacreForm vo = new NacreForm();
-		for (XSParticle child : group.getChildren()) {
-			//parseParticle(child);
-			NacreField field = parseElement(child.getTerm().asElementDecl());
-			vo.getFields().add(field);
-		}
-		return vo;
-	}
-	private NacreField parseElement(XSElementDecl elem) {
-		NacreField field;
-		System.out.println("\telem " + elem.getName() + " " + elem.getType().getName() + " ns: " + elem.getType().getTargetNamespace());
-		if (elem.getType().getName() == null) {
-			// anonymous restriction
-			field = getRestriction(elem.getType().asSimpleType().asRestriction());
-		} else if (!elem.getType().getTargetNamespace().equals(XSD_NAMESPACE)) {
-			// user-defined type
-			//field.setType(elem.getType().getName());
-			NacreForm form = getComplexType(elem.getType().getName());
-			if (form == null) {
-				field = getSimpleType(elem.getType().getName());
-			} else {
-				field = new ComplexType();
-			}
-		} else {
-			// simple type, no restriction
-			field = new SimpleType();
-			((SimpleType)field).setBaseType(elem.getType().getName());
-		}
-		field.setName(elem.getName());
-		return field;
-	}
 }

@@ -9,19 +9,8 @@
 </head>
 <body>
 <c:forEach items="${form.fields}" var="field">
-	${field.name} : ${field.fieldType} <br />
-	<c:choose>
-		<c:when test="${field.fieldType eq 'SimpleType'}">
-			<c:if test="${field.baseType eq 'string'}">
-				${field.baseType}: <input type="text" name="${field.name}" maxlength="${field.maxLength}" /><br />
-			</c:if>
-		</c:when>
-		<c:otherwise>
-			<c:forEach items="${field.fields}" var="child">
-				&nbsp;&nbsp;&nbsp;${child.name} : ${child.fieldType} <br />
-			</c:forEach>
-		</c:otherwise>
-	</c:choose>
+	<c:set var="field" value="${field}" scope="request" />
+	<jsp:include page="field.jsp" />
 </c:forEach>
 </body>
 </html>
