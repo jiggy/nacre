@@ -5,6 +5,24 @@ public class SimpleType extends Field {
 	private int maxLength;
 	private int minLength;
 	private String pattern;
+	private String dflt;
+	public String getDflt() {
+		return dflt;
+	}
+
+	public void setDflt(String dflt) {
+		this.dflt = dflt;
+	}
+
+	public String getFixed() {
+		return fixed;
+	}
+
+	public void setFixed(String fixed) {
+		this.fixed = fixed;
+	}
+
+	private String fixed;
 
 	public int getMaxLength() {
 		return maxLength;

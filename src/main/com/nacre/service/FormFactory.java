@@ -170,6 +170,8 @@ public class FormFactory
 		if (type != null && type.getContentType() != null) {
 			XSParticle particle = type.getContentType().asParticle();
 			vo = parseModelGroup(particle.getTerm().asModelGroup());
+			vo.setMinOccurs(particle.getMinOccurs());
+			vo.setMaxOccurs(particle.getMaxOccurs());
 		}
 		return vo;
 	}
