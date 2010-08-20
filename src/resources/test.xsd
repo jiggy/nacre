@@ -35,7 +35,7 @@
 	</complexType>
     <complexType name="Article">
     	<sequence>
-    		<element name="headLine" type="string" maxOccurs="1" minOccurs="1">
+    		<element name="headLine" maxOccurs="1" minOccurs="1">
     			<simpleType>
     				<restriction base="string">
     					<maxLength value="80" />

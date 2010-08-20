@@ -51,7 +51,7 @@ public class FormServlet extends HttpServlet {
 		} else if (request.getParameter("complexType") != null) {
 			ComplexType field = formFactory.getComplexType(request.getParameter("complexType"));
 			request.setAttribute("field", field);
-			request.getRequestDispatcher("/layouts/field.jsp").include(request, response);
+			request.getRequestDispatcher("/layouts/complexType.jsp").include(request, response);
 		}
 	}
 }
