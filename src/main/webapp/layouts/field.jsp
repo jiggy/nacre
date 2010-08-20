@@ -4,6 +4,7 @@
 
 <c:set var="id" value="${path}-${field.name}" scope="request" />
 <div class="field-box row" id="${id}">
+<div><a href="#" class="replicate-plus">+</a><a href="#" class="replicate-minus">-</a></div>
 <c:choose>
 	<c:when test="${field.fieldType eq 'SimpleType'}">
 		<jsp:include page="simpleType.jsp" />
