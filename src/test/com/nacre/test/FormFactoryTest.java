@@ -15,8 +15,9 @@ public class FormFactoryTest {
 		Field art = formFactory.findComplexType("Article");
 		assertNotNull(art);
 
-		Field headline = formFactory.query("/type::Article/model::sequence/element::body");
-		System.out.println("name: " + headline.getName());
-		assertNotNull(headline);
+		Field author = formFactory.query("/type::Article//element::byline//element::author");
+		assertNotNull(author);
+		assertEquals(author.getName(), "author");
+		assertEquals(author.getDecoration().getLabel(), "Author");
 	}
 }

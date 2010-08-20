@@ -3,10 +3,13 @@ $(document).ready(function() {
 	console.log("ready!");
 	$(".replicate-plus").click(function() {
 		var containerId = $(this).parent().parent().attr("id");
-		containerId = containerId.replace(/^nacredoc/,"").replace(/-/g,"");
+		console.log("plus! " + containerId);
+		containerId = containerId.replace(/-/g,"/");
+		console.log("plus! " + containerId);
+		containerId = containerId.replace("^/", "/type::").replace(new RegExp("(.)/","g"), "$1//element::");
 		console.log("plus! " + containerId);
 		$.ajax({
-			url:"FormServlet?complexType=" + containerId,
+			url:"FormServlet?query=" + containerId,
 			success:function(data) {
 				console.log(data);
 			}

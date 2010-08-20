@@ -46,4 +46,8 @@
     		<element name="byline" type="tns:byline" maxOccurs="2" />
     	</sequence>
     </complexType>
+    <complexType name="Profile">
+    	<all>
+    	</all>
+    </complexType>
 </schema>
