@@ -20,7 +20,7 @@
 </c:forEach>
 <c:forEach items="${form.form.fields}" var="field">
 	<c:set var="field" value="${field}" scope="request" />
-	<c:set var="path" value="/${param.type}" scope="request" />
+	<c:set var="path" value="${param.type}" scope="request" />
 	<jsp:include page="field.jsp" />
 </c:forEach>
 </body>

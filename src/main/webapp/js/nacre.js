@@ -2,16 +2,16 @@ console.log("nacre!");
 $(document).ready(function() {
 	console.log("ready!");
 	$(".replicate-plus").click(function() {
-		var containerId = $(this).parent().parent().attr("id");
+		var container = $(this).parent().parent();
+		var containerId = container.attr("id");
 		console.log("plus! " + containerId);
-		containerId = containerId.replace(/-/g,"/");
-		console.log("plus! " + containerId);
-		containerId = containerId.replace("^/", "/type::").replace(new RegExp("(.)/","g"), "$1//element::");
-		console.log("plus! " + containerId);
+		var query = "/type::" + containerId.replace(new RegExp("/","g"), "//element::");
+		console.log("plus! " + query);
 		$.ajax({
-			url:"FormServlet?query=" + containerId,
+			url:"FormServlet?query=" + query,
 			success:function(data) {
 				console.log(data);
+				container.after($(data));
 			}
 		});
 	});
