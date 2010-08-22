@@ -52,7 +52,7 @@ public class FormServlet extends HttpServlet {
 		} else if (request.getParameter("query") != null) {
 			Field field = formFactory.query(request.getParameter("query"));
 			request.setAttribute("field", field);
-			request.getRequestDispatcher(field.getFieldType().equals(FieldType.ComplexType) ? "layouts/complexType.jsp" : "/layouts/simpleType.jsp").include(request, response);
+			request.getRequestDispatcher("/layouts/field.jsp").include(request, response);
 		}
 	}
 }
