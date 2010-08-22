@@ -57,6 +57,7 @@ public class FormFactory
 	}
 	
 	public Field query(String query) {
+		System.out.println("Query for " + query);
 		XSComponent result = parsed.selectSingle(query, new NamespaceContext() {
 			public String getNamespaceURI(String prefix) {
 				return "http://www.nacre.com/test";
@@ -95,6 +96,7 @@ public class FormFactory
 			}
 
 			public Field complexType(XSComplexType arg0) {
+				System.out.println("query returned complex type");
 				return getComplexType(arg0);
 			}
 
@@ -135,22 +137,27 @@ public class FormFactory
 			}
 
 			public Field particle(XSParticle arg0) {
+				System.out.println("query returned particle");
 				return parseParticle(arg0);
 			}
 
 			public Field simpleType(XSSimpleType arg0) {
+				System.out.println("query returned simple type");
 				return getSimpleType(arg0);
 			}
 
 			public Field elementDecl(XSElementDecl arg0) {
+				System.out.println("query returned element declaration");
 				return parseTerm(arg0);
 			}
 
 			public Field modelGroup(XSModelGroup arg0) {
+				System.out.println("query returned term");
 				return parseTerm(arg0);
 			}
 
 			public Field modelGroupDecl(XSModelGroupDecl arg0) {
+				System.out.println("query returned model group decl");
 				return parseTerm(arg0);
 			}
 			public Field wildcard(XSWildcard arg0) {
