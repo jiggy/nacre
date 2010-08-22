@@ -2,7 +2,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
-<!-- complexType name: ${field.name}, id: ${id} -->
 <div class="complexContent-box">
 <div class="complexContent-header row">
 	<div class="complexContent-label col"><strong>${field.name}</strong></div>
@@ -17,4 +16,3 @@
 	<jsp:include page="field.jsp" />
 </c:forEach>
 </div>
-<!-- /complexType name: ${field.name}, id: ${id} -->

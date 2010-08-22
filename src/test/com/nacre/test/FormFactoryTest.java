@@ -12,8 +12,8 @@ public class FormFactoryTest {
 	@Test
 	public void testQuery() throws SAXException {
 		FormFactory formFactory = new FormFactory(this.getClass().getResource("/test.xsd"));
-//		Field art = formFactory.findComplexType("Article");
-//		assertNotNull(art);
+		Field art = formFactory.findComplexType("Article");
+		assertNotNull(art);
 
 		Field author = formFactory.query("/type::Article//element::byline");
 		assertNotNull(author);

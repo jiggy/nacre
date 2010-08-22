@@ -15,7 +15,7 @@ em{font-style:italic;}
 body {font: normal 62.5%/1.4em Verdana, sans-serif; cursor: default;}
 
 div.field-box {
-	border: thin solid black; margin-left: 5px; padding: 5px; background-color: #FFF;
+	border: thin solid black; margin: 5px; background-color: #FFF;
 }
 div.complexContent-box {
 	background-color: #EEE;
@@ -23,6 +23,8 @@ div.complexContent-box {
 .field-label {
 	width: 200px;
 	text-align: right;
+	padding-right: 10px;
+	padding-top: 3px;
 }
 .row {
 	display: block;
@@ -41,6 +43,7 @@ div.complexContent-box {
 .complexContent-label {
 	width: 40%;
 	text-transform:uppercase;
+	padding-left: 5px
 }
 .complexContent-label:first-letter {
 	font-size: 1.2em;
