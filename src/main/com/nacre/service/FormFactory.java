@@ -6,8 +6,10 @@ import java.util.Iterator;
 
 import javax.xml.namespace.NamespaceContext;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.xml.sax.SAXException;
 
 import com.nacre.service.vo.ComplexType;
@@ -37,6 +39,7 @@ import com.sun.xml.xsom.XSSimpleType;
 import com.sun.xml.xsom.XSTerm;
 import com.sun.xml.xsom.XSWildcard;
 import com.sun.xml.xsom.XSXPath;
+import com.sun.xml.xsom.XmlString;
 import com.sun.xml.xsom.parser.XSOMParser;
 import com.sun.xml.xsom.visitor.XSFunction;
 
@@ -57,6 +60,7 @@ public class FormFactory
 	}
 	
 	public Field query(String query) {
+		System.out.println("Query for " + query);
 		XSComponent result = parsed.selectSingle(query, new NamespaceContext() {
 			public String getNamespaceURI(String prefix) {
 				return "http://www.nacre.com/test";
@@ -95,6 +99,7 @@ public class FormFactory
 			}
 
 			public Field complexType(XSComplexType arg0) {
+				System.out.println("query returned complex type");
 				return getComplexType(arg0);
 			}
 
@@ -135,22 +140,27 @@ public class FormFactory
 			}
 
 			public Field particle(XSParticle arg0) {
+				System.out.println("query returned particle");
 				return parseParticle(arg0);
 			}
 
 			public Field simpleType(XSSimpleType arg0) {
+				System.out.println("query returned simple type");
 				return getSimpleType(arg0);
 			}
 
 			public Field elementDecl(XSElementDecl arg0) {
+				System.out.println("query returned element declaration");
 				return parseTerm(arg0);
 			}
 
 			public Field modelGroup(XSModelGroup arg0) {
+				System.out.println("query returned term");
 				return parseTerm(arg0);
 			}
 
 			public Field modelGroupDecl(XSModelGroupDecl arg0) {
+				System.out.println("query returned model group decl");
 				return parseTerm(arg0);
 			}
 			public Field wildcard(XSWildcard arg0) {
@@ -249,12 +259,18 @@ public class FormFactory
 		if (annotation != null) {
 			field.setDecoration((Decoration) annotation.getAnnotation());
 		} else {
+			// beautify field name if no label is set
 			// TODO this should be configurable via schema-level annotation, options for delimiter-base parsing as well
 			Decoration dec = new Decoration();
-			dec.setLabel(WordUtils.capitalize(StringUtils.join(StringUtils.splitByCharacterTypeCamelCase(elem.getName()), " ")));
+			dec.setLabel(WordUtils.capitalize(StringUtils.join(
+					StringUtils.splitByCharacterTypeCamelCase(elem.getName()), " ")));
 			field.setDecoration(dec);
 		}
 		field.setName(elem.getName());
+		if (field.getFieldType().equals(Field.FieldType.SimpleType)) {
+			((SimpleType)field).setDefault(ObjectUtils.defaultIfNull(elem.getDefaultValue(), "").toString());
+			((SimpleType)field).setFixed(ObjectUtils.defaultIfNull(elem.getFixedValue(), "").toString());
+		}
 		return field;
 	}
 
@@ -285,21 +301,38 @@ public class FormFactory
 
 	private Field getRestriction(XSRestrictionSimpleType restriction) {
 		SimpleType field = new SimpleType();
-		System.out.println("\t\t restriction " + restriction.getName() + ", base " + restriction.getBaseType().getName() + ", facets: " + restriction.getDeclaredFacets().size());
-		for (XSFacet facet : restriction.getDeclaredFacets(XSFacet.FACET_MAXLENGTH)) {
-			System.out.println("\t\t\t facet: " + facet.getValue());
-			field.setMaxLength(new Integer(facet.getValue().toString()));
+		System.out.println("\t\t restriction base " + restriction.getBaseType().getName() + ", facets: " + restriction.getDeclaredFacets().size());
+		field.setMaxLength(NumberUtils.toInt(getFacet(restriction, XSFacet.FACET_MAXLENGTH)));
+		String minl = getFacet(restriction, XSFacet.FACET_MINLENGTH);
+		System.out.println("minl: " + minl);
+		field.setMinLength(NumberUtils.createInteger(minl));
+		field.setLength(NumberUtils.createInteger(getFacet(restriction, XSFacet.FACET_LENGTH)));
+
+		field.setPattern(getFacet(restriction, XSFacet.FACET_PATTERN));
+
+		field.setMaxExclusive(NumberUtils.createDouble(getFacet(restriction, XSFacet.FACET_MAXEXCLUSIVE)));
+		field.setMaxInclusive(NumberUtils.createDouble(getFacet(restriction, XSFacet.FACET_MAXINCLUSIVE)));
+		field.setMinExclusive(NumberUtils.createDouble(getFacet(restriction, XSFacet.FACET_MINEXCLUSIVE)));
+		field.setMinInclusive(NumberUtils.createDouble(getFacet(restriction, XSFacet.FACET_MININCLUSIVE)));
+
+		field.setFractionDigits(NumberUtils.createInteger(getFacet(restriction, XSFacet.FACET_FRACTIONDIGITS)));
+		field.setTotalDigits(NumberUtils.createInteger(getFacet(restriction, XSFacet.FACET_TOTALDIGITS)));
+		
+		String ws = getFacet(restriction, XSFacet.FACET_WHITESPACE);
+		if (ws != null) {
+			field.setWhitespace(SimpleType.WhiteSpaceRestriction.valueOf(ws));
 		}
-		for (XSFacet facet : restriction.getDeclaredFacets(XSFacet.FACET_MINLENGTH)) {
-			System.out.println("\t\t\t facet: " + facet.getValue());
-			field.setMinLength(new Integer(facet.getValue().toString()));
-		}
-		for (XSFacet facet : restriction.getDeclaredFacets(XSFacet.FACET_PATTERN)) {
-			System.out.println("\t\t\t facet: " + facet.getValue());
-			field.setPattern(facet.getValue().toString());
-		}
+
 		field.setBaseType(restriction.getBaseType().getName());
 		return field;
 	}
-	
+
+	private String getFacet(XSRestrictionSimpleType r, String name) {
+		XSFacet facet = r.getDeclaredFacet(name);
+		if (facet != null) {
+			XmlString xs = facet.getValue();
+			return xs.toString();
+		}
+		return null;
+	}
 }

@@ -2,4 +2,4 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
-<input type="text" name="${field.name}" maxlength="${field.maxLength}" />
+<input type="text" id="${id}-input" name="${field.name}" maxlength="${field.maxLength}" />

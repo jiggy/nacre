@@ -15,7 +15,6 @@ import org.xml.sax.SAXException;
 import com.nacre.service.FormFactory;
 import com.nacre.service.vo.Field;
 import com.nacre.service.vo.Form;
-import com.nacre.service.vo.Field.FieldType;
 
 public class FormServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -52,7 +51,7 @@ public class FormServlet extends HttpServlet {
 		} else if (request.getParameter("query") != null) {
 			Field field = formFactory.query(request.getParameter("query"));
 			request.setAttribute("field", field);
-			request.getRequestDispatcher(field.getFieldType().equals(FieldType.ComplexType) ? "layouts/complexType.jsp" : "/layouts/simpleType.jsp").include(request, response);
+			request.getRequestDispatcher("/layouts/field.jsp").include(request, response);
 		}
 	}
 }

@@ -11,6 +11,7 @@
 <link rel="stylesheet" type="text/css" href="${cp}/css/jquery-ui-1.8.4.custom.css" />
 <link rel="stylesheet" type="text/css" href="${cp}/css/nacre.css" />
 <script type="text/javascript" src="${cp}/js/lib/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="${cp}/js/lib/jquery.validate.js"></script>
 <script type="text/javascript" src="${cp}/js/lib/jquery-ui-1.8.4.custom.min.js"></script>
 <script type="text/javascript" src="${cp}/js/nacre.js"></script>
 </head>
@@ -18,10 +19,12 @@
 <c:forEach items="${form.actions}" var="action">
 	<a href="${action.uri}">${action.label}</a><br />
 </c:forEach>
+<form name="nacreForm" id="nacreForm">
 <c:forEach items="${form.form.fields}" var="field">
 	<c:set var="field" value="${field}" scope="request" />
-	<c:set var="path" value="/${param.type}" scope="request" />
+	<c:set var="path" value="${param.type}" scope="request" />
 	<jsp:include page="field.jsp" />
 </c:forEach>
+</form>
 </body>
 </html>

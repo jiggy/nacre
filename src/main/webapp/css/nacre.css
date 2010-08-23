@@ -1,9 +1,30 @@
+/* global reset 
+object{display:block;}
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,dl,dt,dd,ol,button,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-weight:inherit;font-style:inherit;font-size:100%;font-family:inherit;vertical-align:baseline;}
+html {overflow-y: scroll;}
+td{vertical-align:top;}
+a, :focus{outline:0; outline:none;}
+ol,ul{list-style:none;}
+table{border-collapse:collapse;border-spacing:0;}
+caption,th,td{text-align:left;font-weight:normal;}
+blockquote:before,blockquote:after,q:before,q:after{content:"";}
+blockquote,q{quotes:"" "";}
+strong{font-weight:bold;}
+em{font-style:italic;}
+*/
+body {font: normal 62.5%/1.4em Verdana, sans-serif; cursor: default;}
+
 div.field-box {
-	border: thin solid black; margin-left: 5px; padding: 5px;
+	border: thin solid black; margin: 5px; background-color: #FFF;
+}
+div.complexContent-box {
+	background-color: #EEE;
 }
 .field-label {
 	width: 200px;
 	text-align: right;
+	padding-right: 10px;
+	padding-top: 3px;
 }
 .row {
 	display: block;
@@ -12,4 +33,23 @@ div.field-box {
 .col {
 	display: block;
 	float: left;
+}
+
+.complexContent-header {
+	height: 30px;
+	width: 100%;
+	padding-top: 3px;
+}
+.complexContent-label {
+	width: 40%;
+	text-transform:uppercase;
+	padding-left: 5px
+}
+.complexContent-label:first-letter {
+	font-size: 1.2em;
+}
+.complexContent-controls {
+	text-align: right;
+	padding-right: 20px;
+	width: 40%;
 }
