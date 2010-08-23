@@ -21,3 +21,7 @@ $(document).ready(function() {
 		return false;
 	});
 });
+
+$$ = function(selector) {
+	return $(selector.replace(new RegExp("/","g"), "\\/"));
+};
