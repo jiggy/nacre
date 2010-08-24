@@ -2,7 +2,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
-<!-- field name: ${field.name}, id: ${id} -->
 <c:set var="id" value="${path}/${field.name}" scope="request" />
 <div class="field-box row" id="${id}">
 <c:choose>
@@ -15,4 +14,3 @@
 	</c:otherwise>
 </c:choose>
 </div>
-<!-- /field name: ${field.name}, id: ${id} -->

@@ -9,3 +9,10 @@
 	<button class="replicate-minus" title="Remove this ${field.name}">-</button>
 </c:if>
 </div>
+<script type="text/javascript">
+rules['${field.name}'] = {
+	required:${field.required ? "true" : "false"}
+	<c:if test="${!empty field.minLength}">,minlength:${field.minLength}</c:if>
+	<c:if test="${!empty field.maxLength}">,maxlength:${field.maxLength}</c:if>
+};
+</script>

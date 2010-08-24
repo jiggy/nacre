@@ -1,6 +1,7 @@
 console.log("nacre!");
-$(document).ready(function() {
+$().ready(function() {
 	console.log("ready!");
+	$("#nacreForm").validate({'rules':rules});
 	$(".replicate-plus").click(function() {
 		var containerId = $(this).val();
 		var container = $("#"+containerId.replace(new RegExp("/","g"), "\\/"));
@@ -22,6 +23,4 @@ $(document).ready(function() {
 	});
 });
 
-$$ = function(selector) {
-	return $(selector.replace(new RegExp("/","g"), "\\/"));
-};
+var rules = {};

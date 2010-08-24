@@ -39,6 +39,7 @@
     		<element name="headLine" maxOccurs="3" minOccurs="1">
     			<simpleType>
     				<restriction base="string">
+    					<minLength value="8" />
     					<maxLength value="80" />
     				</restriction>
     			</simpleType>
