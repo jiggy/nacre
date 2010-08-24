@@ -53,3 +53,6 @@ div.complexContent-box {
 	padding-right: 20px;
 	width: 40%;
 }
+input.error {
+	background-color:#FAA;
+}
