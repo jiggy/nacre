@@ -18,6 +18,8 @@ rules['${field.name}'] = {
 	<c:if test="${!empty field.length}">,maxlength:${field.length},minlength:${field.length}</c:if>
 	<c:if test="${!empty field.minInclusive}">,min:${field.minInclusive}</c:if>
 	<c:if test="${!empty field.maxInclusive}">,max:${field.maxInclusive}</c:if>
+	<c:if test="${!empty field.minExclusive}">,minExclusive:${field.minExclusive}</c:if>
+	<c:if test="${!empty field.maxExclusive}">,maxExclusive:${field.maxExclusive}</c:if>
 	<c:if test="${!empty field.pattern}">,pattern:/${field.pattern}/</c:if>
 };
 </script>

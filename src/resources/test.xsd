@@ -48,8 +48,8 @@
     		<element name="eggs" minOccurs="0" maxOccurs="1">
     			<simpleType>
     				<restriction base="integer">
-    					<minInclusive value="6"></minInclusive>
-    					<maxInclusive value="12"></maxInclusive>
+    					<minExclusive value="6"></minExclusive>
+    					<maxExclusive value="12"></maxExclusive>
     				</restriction>
     			</simpleType>
     		</element>

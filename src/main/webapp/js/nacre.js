@@ -5,6 +5,14 @@ $().ready(function() {
 		function(value, element, pattern) {
 			return pattern.test(value);
 		}, jQuery.format("Failed to match pattern {0}"));
+	$.validator.addMethod("minExclusive",
+			function(value, element, min) {
+				return value > min;
+			}, jQuery.format("Value must be more than {0}"));
+	$.validator.addMethod("maxExclusive",
+			function(value, element, max) {
+				return value < max;
+			}, jQuery.format("Value must be less than {0}"));
 	$("#nacreForm").validate({'rules':rules});
 	$(".replicate-plus").click(function() {
 		var containerId = $(this).val();
