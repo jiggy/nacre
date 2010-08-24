@@ -1,10 +1,10 @@
-console.log("nacre!");
-$().ready(function() {
-	console.log("ready!");
+var nacre = nacre?nacre:{};
+
+nacre.addValidatorMethods = function() {
 	$.validator.addMethod("pattern",
-		function(value, element, pattern) {
-			return pattern.test(value);
-		}, jQuery.format("Failed to match pattern {0}"));
+			function(value, element, pattern) {
+				return pattern.test(value);
+			}, jQuery.format("Failed to match pattern {0}"));
 	$.validator.addMethod("minExclusive",
 			function(value, element, min) {
 				return value > min;
@@ -13,6 +13,28 @@ $().ready(function() {
 			function(value, element, max) {
 				return value < max;
 			}, jQuery.format("Value must be less than {0}"));
+	$.validator.addMethod("number",
+			function(value, element, mustBeNumber) {
+				return !mustBeNumber || /^-?[\d\.]+$/.text(value);
+			}, jQuery.format("Value must be a number"));
+	$.validator.addMethod("totalDigits",
+			function(value, element, totalDigits) {
+				value.replace(new RegExp("[^\\d]","g"), "").length <= totalDigits
+			}, jQuery.format("Value must have at most {0} digits"));
+	$.validator.addMethod("fractionDigits",
+			function(value, element, fractionDigits) {
+				value.match(/\.(\d+)/)[1].length <= fractionDigits
+			}, jQuery.format("Value must have at most {0} digits right of the decimal place"));
+
+};
+
+console.log("nacre!");
+$().ready(function() {
+	console.log("ready!");
+	nacre.init();
+});
+nacre.init = function() {
+	nacre.addValidatorMethods();
 	$("#nacreForm").validate({'rules':rules});
 	$(".replicate-plus").click(function() {
 		var containerId = $(this).val();
@@ -33,6 +55,6 @@ $().ready(function() {
 		console.log("minus!");
 		return false;
 	});
-});
+};
 
 var rules = {};

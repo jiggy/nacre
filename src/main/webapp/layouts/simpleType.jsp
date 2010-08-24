@@ -21,5 +21,6 @@ rules['${field.name}'] = {
 	<c:if test="${!empty field.minExclusive}">,minExclusive:${field.minExclusive}</c:if>
 	<c:if test="${!empty field.maxExclusive}">,maxExclusive:${field.maxExclusive}</c:if>
 	<c:if test="${!empty field.pattern}">,pattern:/${field.pattern}/</c:if>
+	<c:if test="${field.baseType eq 'int' || field.baseType eq 'integer'}">,digits:true</c:if>
 };
 </script>

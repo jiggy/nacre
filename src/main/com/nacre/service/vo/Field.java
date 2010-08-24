@@ -1,10 +1,19 @@
 package com.nacre.service.vo;
 
 public abstract class Field {
+	private String id;
 	private String name;
 	private int minOccurs;
 	private int maxOccurs;
 	private Decoration decoration;
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public Decoration getDecoration() {
 		return decoration;
