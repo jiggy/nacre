@@ -302,10 +302,8 @@ public class FormFactory
 	private Field getRestriction(XSRestrictionSimpleType restriction) {
 		SimpleType field = new SimpleType();
 		System.out.println("\t\t restriction base " + restriction.getBaseType().getName() + ", facets: " + restriction.getDeclaredFacets().size());
-		field.setMaxLength(NumberUtils.toInt(getFacet(restriction, XSFacet.FACET_MAXLENGTH)));
-		String minl = getFacet(restriction, XSFacet.FACET_MINLENGTH);
-		System.out.println("minl: " + minl);
-		field.setMinLength(NumberUtils.createInteger(minl));
+		field.setMaxLength(NumberUtils.createInteger(getFacet(restriction, XSFacet.FACET_MAXLENGTH)));
+		field.setMinLength(NumberUtils.createInteger(getFacet(restriction, XSFacet.FACET_MINLENGTH)));
 		field.setLength(NumberUtils.createInteger(getFacet(restriction, XSFacet.FACET_LENGTH)));
 
 		field.setPattern(getFacet(restriction, XSFacet.FACET_PATTERN));
