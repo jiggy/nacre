@@ -48,10 +48,13 @@ div.complexContent-box {
 .complexContent-label:first-letter {
 	font-size: 1.2em;
 }
-.complexContent-controls {
+.simpleContent-controls, .complexContent-controls {
 	text-align: right;
 	padding-right: 20px;
 	width: 40%;
+}
+.complexContent-controls {
+	padding-right: 20px;
 }
 input.error {
 	background-color:#FAA;

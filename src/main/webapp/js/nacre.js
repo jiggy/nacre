@@ -1,6 +1,10 @@
 console.log("nacre!");
 $().ready(function() {
 	console.log("ready!");
+	$.validator.addMethod("pattern",
+		function(value, element, pattern) {
+			return pattern.test(value);
+		}, jQuery.format("Failed to match pattern {0}"));
 	$("#nacreForm").validate({'rules':rules});
 	$(".replicate-plus").click(function() {
 		var containerId = $(this).val();

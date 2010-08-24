@@ -45,6 +45,21 @@
     			</simpleType>
     		</element>
     		<element name="byline" type="tns:byline" maxOccurs="2" />
+    		<element name="eggs" minOccurs="0" maxOccurs="1">
+    			<simpleType>
+    				<restriction base="integer">
+    					<minInclusive value="6"></minInclusive>
+    					<maxInclusive value="12"></maxInclusive>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    		<element name="hex" minOccurs="0" maxOccurs="1">
+    			<simpleType>
+    				<restriction base="string">
+    					<pattern value="^[0-9a-fA-F]+$"></pattern>
+    				</restriction>
+    			</simpleType>
+    		</element>
     	</sequence>
     </complexType>
     <complexType name="Profile">
