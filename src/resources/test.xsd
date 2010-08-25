@@ -36,7 +36,7 @@
     <complexType name="Article">
     	<sequence>
     		<element name="body" type="string" />
-    		<element name="headLine" maxOccurs="3" minOccurs="1">
+    		<element name="headLine" maxOccurs="3" minOccurs="2">
     			<simpleType>
     				<restriction base="string">
     					<minLength value="8" />

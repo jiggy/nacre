@@ -102,6 +102,7 @@ public class ParsingUtils {
 				public void startElement(String uri,
 						String localName, String qName,
 						Attributes atts) throws SAXException {
+					System.out.println("Got annotation for " + localName + " qname " + qName);
 					if (uri.equals("http://www.nacre.com/decorations")) {
 						if (localName.equals("label")) {
 							decoration.setLabel(atts.getValue("label"));

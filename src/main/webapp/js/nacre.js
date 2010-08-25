@@ -36,6 +36,12 @@ $().ready(function() {
 nacre.init = function() {
 	nacre.addValidatorMethods();
 	$("#nacreForm").validate({'rules':rules});
+	nacre.initHandlers();
+}
+
+nacre.initHandlers = function() {	
+	$(".datepicker").datepicker();
+
 	$(".replicate-plus").click(function() {
 		var containerId = $(this).val();
 		var container = $("#"+containerId.replace(new RegExp("/","g"), "\\/"));
@@ -58,3 +64,7 @@ nacre.init = function() {
 };
 
 var rules = {};
+
+nacre.getField = function(selector) {
+	return $("#" + selector.replace(new RegExp("/","g"), "\\/"));
+};
