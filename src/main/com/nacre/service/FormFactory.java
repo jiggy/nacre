@@ -238,22 +238,22 @@ public class FormFactory
 
 		public Field attributeDecl(XSAttributeDecl arg0) {
 			System.out.println("Attr decl?");
-			// TODO Auto-generated method stub
-			return null;
+			SimpleType st;
+			if (arg0.getType() == null || arg0.getType().getName() == null) {
+				System.out.println("attr type is null");
+				st = (SimpleType) arg0.getType().apply(func);
+			} else {
+				st = new SimpleType();
+				st.setBaseType(arg0.getType().getName());
+				System.out.println("attr type is there " + st.getName() + ", " + st.getBaseType());
+			}
+			st.setName(arg0.getName());
+			return st;
 		}
 
 		public Field attributeUse(XSAttributeUse arg0) {
 			System.out.println("Attr use?");
-			SimpleType st;
-			if (arg0.getDecl().getType() == null) {
-				System.out.println("attr type is null");
-				st = (SimpleType) arg0.getDecl().getType().apply(func);
-			} else {
-				st = new SimpleType();
-				st.setBaseType(arg0.getDecl().getType().getName());
-				st.setName(arg0.getDecl().getName());
-				System.out.println("attr type is there " + st.getName() + ", " + st.getBaseType());
-			}
+			SimpleType st = (SimpleType) arg0.getDecl().apply(func);
 			st.setDefault(ObjectUtils.defaultIfNull(arg0.getDefaultValue(),"").toString());
 			st.setFixed(ObjectUtils.defaultIfNull(arg0.getFixedValue(),"").toString());
 			st.setAttribute(true);

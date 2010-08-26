@@ -30,6 +30,10 @@ public abstract class Field {
 	public boolean isRequired() {
 		return minOccurs > 0;
 	}
+	
+	public boolean isAttribute() {
+		return false;
+	}
 
 	public void setMinOccurs(int minOccurs) {
 		this.minOccurs = minOccurs;

@@ -21,6 +21,13 @@
 			<element name="location" type="tns:location" />
 		</sequence>
 		<attribute name="service" type="boolean" />
+		<attribute name="thing">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="80"></maxLength>
+				</restriction>
+			</simpleType>
+		</attribute>
 	</complexType>
 	<complexType name="location">
 		<sequence>
