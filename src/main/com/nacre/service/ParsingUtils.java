@@ -5,6 +5,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
@@ -14,6 +16,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
+import org.xml.sax.helpers.DefaultHandler;
 
 import com.nacre.service.vo.Decoration;
 import com.sun.xml.xsom.parser.AnnotationContext;
@@ -57,46 +60,17 @@ public class ParsingUtils {
 	};
 	
 	private static AnnotationParser nacreXSOMAnnotationParser = new AnnotationParser() {
-		Decoration decoration = new Decoration();
+		Map<String, Decoration> decorations = new HashMap<String,Decoration>();
+		String locatorKey;
 		@Override
 		public ContentHandler getContentHandler(
 				AnnotationContext ctx, String parent,
 				ErrorHandler errorHandler, EntityResolver entityResolver) {
 			System.out.println("got an annotation, parent [" + parent + "] type [" + ctx.toString() + "]");
-			return new ContentHandler() {
-
-				public void characters(char[] ch, int start,
-						int length) throws SAXException {
-				}
-
-				public void endDocument() throws SAXException {
-				}
-
-				public void endElement(String uri,
-						String localName, String qName)
-						throws SAXException {
-				}
-
-				public void endPrefixMapping(String prefix)
-						throws SAXException {
-				}
-
-				public void ignorableWhitespace(char[] ch,
-						int start, int length) throws SAXException {
-				}
-
-				public void processingInstruction(String target,
-						String data) throws SAXException {
-				}
-
+			return new DefaultHandler() {
 				public void setDocumentLocator(Locator locator) {
-				}
-
-				public void skippedEntity(String name)
-						throws SAXException {
-				}
-
-				public void startDocument() throws SAXException {
+					System.out.println("Annotation location: " + locator.getLineNumber() + ":" + locator.getColumnNumber());
+					locatorKey = locatorKey(locator);
 				}
 
 				public void startElement(String uri,
@@ -105,23 +79,24 @@ public class ParsingUtils {
 					System.out.println("Got annotation for " + localName + " qname " + qName);
 					if (uri.equals("http://www.nacre.com/decorations")) {
 						if (localName.equals("label")) {
+							Decoration decoration = new Decoration();
 							decoration.setLabel(atts.getValue("label"));
+							decorations.put(locatorKey, decoration);
 						}
 					}
 				}
-
-				public void startPrefixMapping(String prefix,
-						String uri) throws SAXException {
-				}
-				
 			}; 				
 		}
 
 		@Override
-		public Object getResult(Object arg0) {
-			return decoration;
+		public Object getResult(Object o) {
+			return decorations;
 		}
 		
 	};
+	
+	public static String locatorKey(Locator l) {
+		return l.getPublicId() + ":" + l.getLineNumber() + ":" + l.getColumnNumber();
+	}
 	
 }

@@ -12,17 +12,27 @@ import com.nacre.service.vo.Form;
 public class FormFactoryTest {
 	String path = "/Article";
 	String id = "";
+	FormFactory formFactory = null;
 
-	@Test
-	public void testQuery() throws SAXException {
-		FormFactory formFactory = new FormFactory(this.getClass().getResource("/test.xsd"));
-		Field art = formFactory.findComplexType("Article");
-		assertNotNull(art);
-		
-		Form artForm = formFactory.getForm("Article");
-		for (Field f : artForm.getForm().getFields()) {
-			getField(f);
+	public void setup() {
+		try {
+			formFactory = new FormFactory(this.getClass().getResource("/test.xsd"));
+		} catch (SAXException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
 		}
+	}
+	
+	@Test
+	public void testGetForm() {
+		setup();
+		Form art = formFactory.getForm("Article");
+		assertNotNull(art);
+	}
+	
+	@Test
+	public void testQuery() {
+		setup();
 
 		Field author = formFactory.query("/type::Article//element::byline");
 		assertNotNull(author);
@@ -30,10 +40,4 @@ public class FormFactoryTest {
 		assertEquals(author.getDecoration().getLabel(), "Byline");
 	}
 	
-	private void getField(Field f) {
-		path += "/" + f.getName();
-		for (int i = 1; i < Math.max(1, f.getMinOccurs()); i++) {
-			path += "[" + i + "]";
-		}
-	}
 }

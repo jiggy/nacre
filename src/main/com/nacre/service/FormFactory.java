@@ -3,6 +3,7 @@ package com.nacre.service;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.xml.namespace.NamespaceContext;
 
@@ -36,7 +37,6 @@ import com.sun.xml.xsom.XSRestrictionSimpleType;
 import com.sun.xml.xsom.XSSchema;
 import com.sun.xml.xsom.XSSchemaSet;
 import com.sun.xml.xsom.XSSimpleType;
-import com.sun.xml.xsom.XSTerm;
 import com.sun.xml.xsom.XSWildcard;
 import com.sun.xml.xsom.XSXPath;
 import com.sun.xml.xsom.XmlString;
@@ -72,103 +72,7 @@ public class FormFactory
 				return Arrays.asList(new String[]{""}).iterator();
 			}
 		});
-		return result.apply(new XSFunction<Field>() {
-
-			public Field annotation(XSAnnotation arg0) {
-				System.out.println("Annotation?");
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			public Field attGroupDecl(XSAttGroupDecl arg0) {
-				System.out.println("Attr group decl?");
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			public Field attributeDecl(XSAttributeDecl arg0) {
-				System.out.println("Attr decl?");
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			public Field attributeUse(XSAttributeUse arg0) {
-				System.out.println("Attr use?");
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			public Field complexType(XSComplexType arg0) {
-				System.out.println("query returned complex type");
-				return getComplexType(arg0);
-			}
-
-			public Field facet(XSFacet arg0) {
-				System.out.println("Facet ?");
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			public Field identityConstraint(XSIdentityConstraint arg0) {
-				System.out.println("id constraint?");
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			public Field notation(XSNotation arg0) {
-				System.out.println("Note?");
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			public Field schema(XSSchema arg0) {
-				System.out.println("Schema?");
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			public Field xpath(XSXPath arg0) {
-				System.out.println("XPath?");
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			public Field empty(XSContentType arg0) {
-				System.out.println("content type?");
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			public Field particle(XSParticle arg0) {
-				System.out.println("query returned particle");
-				return parseParticle(arg0);
-			}
-
-			public Field simpleType(XSSimpleType arg0) {
-				System.out.println("query returned simple type");
-				return getSimpleType(arg0);
-			}
-
-			public Field elementDecl(XSElementDecl arg0) {
-				System.out.println("query returned element declaration");
-				return parseTerm(arg0);
-			}
-
-			public Field modelGroup(XSModelGroup arg0) {
-				System.out.println("query returned term");
-				return parseTerm(arg0);
-			}
-
-			public Field modelGroupDecl(XSModelGroupDecl arg0) {
-				System.out.println("query returned model group decl");
-				return parseTerm(arg0);
-			}
-			public Field wildcard(XSWildcard arg0) {
-				System.out.println("wildcard?");
-				// TODO Auto-generated method stub
-				return null;
-			}
-		});
+		return result.apply(func);
 	}
 
 	public Form getForm(String name) {
@@ -183,20 +87,16 @@ public class FormFactory
 	
 	public ComplexType findComplexType(String name) {
 		System.out.println("Getting form " + name);
-		ComplexType vo = null;
 		XSComplexType type = null;
 		for (XSSchema schema : parsed.getSchemas()) {
 			type = schema.getComplexType(name);
 		}
-		if (type != null && type.getContentType() != null) {
-			vo = getComplexType(type);
-		}
-		return vo;
+		return (ComplexType) type.apply(func);
 	}
 
 	private ComplexType getComplexType(XSComplexType type) {
 		XSParticle particle = type.getContentType().asParticle();
-		ComplexType vo = parseModelGroup(particle.getTerm().asModelGroup());
+		ComplexType vo = (ComplexType) particle.apply(func);
 		vo.setMinOccurs(particle.getMinOccurs());
 		vo.setMaxOccurs(particle.getMaxOccurs());
 		vo.setName(type.getName());
@@ -204,27 +104,9 @@ public class FormFactory
 	}
 
 	private Field parseParticle(XSParticle particle) {
-		Field vo = parseTerm(particle.getTerm());
+		Field vo = particle.getTerm().apply(func);
 		vo.setMaxOccurs(particle.getMaxOccurs());
 		vo.setMinOccurs(particle.getMinOccurs());
-		return vo;
-	}
-	private Field parseTerm(XSTerm term) {
-		Field vo = null;
-		if (term.isModelGroup()) {
-			System.out.println("particle is model group");
-			vo = parseModelGroup(term.asModelGroup());
-		}
-		else if (term.isElementDecl()) {
-			System.out.println("particle is element decl");
-			vo = parseElement(term.asElementDecl());
-		} else if (term.isModelGroupDecl()) {
-			System.out.println("particle is model group decl");
-			vo = parseModelGroup(term.asModelGroupDecl().getModelGroup());
-		} else if (term.isWildcard()) {
-			System.out.println("particle is wildcard");
-			// ????
-		}
 		return vo;
 	}
 	
@@ -233,22 +115,24 @@ public class FormFactory
 		System.out.println(group.getChildren().length + " children");
 		for (XSParticle child : group.getChildren()) {
 			System.out.println("child is " + child.getTerm());
-			Field field = parseParticle(child);
+			Field field = child.apply(func);
 			vo.getFields().add(field);
 		}
 		return vo;
 	}
+	@SuppressWarnings("unchecked")
 	private Field parseElement(XSElementDecl elem) {
 		Field field;
 		System.out.println("\telem " + elem.getName() + " " + elem.getType().getName() + " ns: " + elem.getType().getTargetNamespace());
 		if (elem.getType().getName() == null) {
 			// anonymous restriction
-			field = getRestriction(elem.getType().asSimpleType().asRestriction());
+			field = elem.getType().asSimpleType().apply(func);
 		} else if (!elem.getType().getTargetNamespace().equals(XSD_NAMESPACE)) {
 			// user-defined type
-			field = findComplexType(elem.getType().getName());
-			if (field == null) {
-				field = findSimpleType(elem.getType().getName());
+			if (elem.getType().isComplexType()) {
+				field = elem.getType().asComplexType().apply(func);
+			} else {
+				field = elem.getType().asSimpleType().apply(func);
 			}
 		} else {
 			// simple type, no restriction
@@ -257,7 +141,9 @@ public class FormFactory
 		}
 		com.sun.xml.xsom.XSAnnotation annotation = elem.getAnnotation();
 		if (annotation != null) {
-			field.setDecoration((Decoration) annotation.getAnnotation());
+			System.out.println("adding decoration " + annotation.getLocator().getLineNumber() + ":" + annotation.getLocator().getColumnNumber());
+			field.setDecoration((Decoration) ((Map<String,Decoration>)annotation.getAnnotation()).get(ParsingUtils.locatorKey(annotation.getLocator())));
+			System.out.println("Added annot label " + field.getDecoration().getLabel());
 		} else {
 			// beautify field name if no label is set
 			// TODO this should be configurable via schema-level annotation, options for delimiter-base parsing as well
@@ -333,4 +219,102 @@ public class FormFactory
 		}
 		return null;
 	}
+	
+	private XSFunction<Field> func = new XSFunction<Field>() {
+
+		public Field annotation(XSAnnotation arg0) {
+			System.out.println("Annotation?");
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public Field attGroupDecl(XSAttGroupDecl arg0) {
+			System.out.println("Attr group decl?");
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public Field attributeDecl(XSAttributeDecl arg0) {
+			System.out.println("Attr decl?");
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public Field attributeUse(XSAttributeUse arg0) {
+			System.out.println("Attr use?");
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public Field complexType(XSComplexType arg0) {
+			System.out.println("query returned complex type");
+			return getComplexType(arg0);
+		}
+
+		public Field facet(XSFacet arg0) {
+			System.out.println("Facet ?");
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public Field identityConstraint(XSIdentityConstraint arg0) {
+			System.out.println("id constraint?");
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public Field notation(XSNotation arg0) {
+			System.out.println("Note?");
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public Field schema(XSSchema arg0) {
+			System.out.println("Schema?");
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public Field xpath(XSXPath arg0) {
+			System.out.println("XPath?");
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public Field empty(XSContentType arg0) {
+			System.out.println("content type?");
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public Field particle(XSParticle arg0) {
+			System.out.println("query returned particle");
+			return parseParticle(arg0);
+		}
+
+		public Field simpleType(XSSimpleType arg0) {
+			System.out.println("query returned simple type");
+			return getSimpleType(arg0);
+		}
+
+		public Field elementDecl(XSElementDecl arg0) {
+			System.out.println("query returned element declaration");
+			return parseElement(arg0);
+		}
+
+		public Field modelGroup(XSModelGroup arg0) {
+			System.out.println("query returned term");
+			return parseModelGroup(arg0);
+		}
+
+		public Field modelGroupDecl(XSModelGroupDecl arg0) {
+			System.out.println("query returned model group decl");
+			return parseModelGroup(arg0.getModelGroup());
+		}
+		public Field wildcard(XSWildcard arg0) {
+			System.out.println("wildcard?");
+			// TODO Auto-generated method stub
+			return null;
+		}
+	};
 }
