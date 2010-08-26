@@ -1,6 +1,7 @@
 package com.nacre.service.vo;
 
 public class SimpleType extends Field {
+	private boolean isAttribute = false;
 	private String baseType;
 	private String dflt;
 	private String fixed;
@@ -137,6 +138,14 @@ public class SimpleType extends Field {
 
 	public void setMaxExclusive(Double maxExclusive) {
 		this.maxExclusive = maxExclusive;
+	}
+
+	public boolean isAttribute() {
+		return isAttribute;
+	}
+
+	public void setAttribute(boolean isAttribute) {
+		this.isAttribute = isAttribute;
 	}
 
 }

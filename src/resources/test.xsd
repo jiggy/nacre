@@ -20,6 +20,7 @@
 			</element>
 			<element name="location" type="tns:location" />
 		</sequence>
+		<attribute name="service" type="boolean" />
 	</complexType>
 	<complexType name="location">
 		<sequence>
@@ -61,9 +62,5 @@
     			</simpleType>
     		</element>
     	</sequence>
-    </complexType>
-    <complexType name="Profile">
-    	<all>
-    	</all>
     </complexType>
 </schema>

@@ -97,8 +97,9 @@ public class FormFactory
 	private ComplexType getComplexType(XSComplexType type) {
 		XSParticle particle = type.getContentType().asParticle();
 		ComplexType vo = (ComplexType) particle.apply(func);
-		vo.setMinOccurs(particle.getMinOccurs());
-		vo.setMaxOccurs(particle.getMaxOccurs());
+		for (XSAttributeUse attr : type.getAttributeUses()) {
+			vo.getFields().add(attr.apply(func));
+		}
 		vo.setName(type.getName());
 		return vo;
 	}
@@ -174,6 +175,7 @@ public class FormFactory
 	}
 
 	private Field getSimpleType(XSSimpleType type) {
+		System.out.println("simple time " + type.getName() + " is " + (type.isRestriction() ? "restriction" : "simple simple"));
 		if (type.isRestriction()) {
 			XSRestrictionSimpleType restriction = type.asRestriction();
 			return getRestriction(restriction);
@@ -242,8 +244,20 @@ public class FormFactory
 
 		public Field attributeUse(XSAttributeUse arg0) {
 			System.out.println("Attr use?");
-			// TODO Auto-generated method stub
-			return null;
+			SimpleType st;
+			if (arg0.getDecl().getType() == null) {
+				System.out.println("attr type is null");
+				st = (SimpleType) arg0.getDecl().getType().apply(func);
+			} else {
+				st = new SimpleType();
+				st.setBaseType(arg0.getDecl().getType().getName());
+				st.setName(arg0.getDecl().getName());
+				System.out.println("attr type is there " + st.getName() + ", " + st.getBaseType());
+			}
+			st.setDefault(ObjectUtils.defaultIfNull(arg0.getDefaultValue(),"").toString());
+			st.setFixed(ObjectUtils.defaultIfNull(arg0.getFixedValue(),"").toString());
+			st.setAttribute(true);
+			return st;
 		}
 
 		public Field complexType(XSComplexType arg0) {
