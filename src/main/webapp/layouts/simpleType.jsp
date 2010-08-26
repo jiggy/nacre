@@ -4,7 +4,11 @@
 
 <div class="col field-label">
 <label for="${field.name}">${!empty field.decoration && !empty field.decoration.label ? field.decoration.label : field.name}${field.required ? "*" : ""}</label></div>
-<div class="col field-input"><jsp:include page="${field.baseType}.jsp" /></div>
+<div class="col field-input">
+	<jsp:include page="${field.baseType}.jsp">
+		<jsp:param name="id" value="${param.path}" />
+	</jsp:include>
+</div>
 <div class="simpleContent-controls col"><c:if test="${field.maxOccurs gt 1}">
 	<button class="replicate-plus" title="Add a ${field.name}" value="${id}">+</button>
 	<button class="replicate-minus" title="Remove this ${field.name}">-</button>

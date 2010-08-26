@@ -22,8 +22,9 @@
 <form name="nacreForm" id="nacreForm">
 <c:forEach items="${form.form.fields}" var="field">
 	<c:set var="field" value="${field}" scope="request" />
-	<c:set var="path" value="/${param.type}" scope="request" />
-	<jsp:include page="field.jsp" />
+	<jsp:include page="field.jsp">
+		<jsp:param name="path" value="/${param.type}" />
+	</jsp:include>
 </c:forEach>
 </form>
 </body>

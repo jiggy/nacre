@@ -5,11 +5,14 @@
 <div class="field-box row">
 <c:choose>
 	<c:when test="${field.fieldType eq 'SimpleType'}">
-		<jsp:include page="simpleType.jsp" />
+		<jsp:include page="simpleType.jsp">
+			<jsp:param name="path" value="${param.path}" />
+		</jsp:include>
 	</c:when>
 	<c:otherwise>
-		<c:set var="path" value="${id}" />
-		<jsp:include page="complexType.jsp" />
+		<jsp:include page="complexType.jsp">
+			<jsp:param name="path" value="${param.path}" />
+		</jsp:include>
 	</c:otherwise>
 </c:choose>
 </div>

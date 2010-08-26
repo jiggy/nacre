@@ -13,6 +13,8 @@
 	</div>
 	<c:forEach items="${field.fields}" var="child">
 		<c:set var="field" value="${child}" scope="request" />
-		<jsp:include page="field.jsp" />
+		<jsp:include page="field.jsp">
+			<jsp:param name="path" value="${param.path}" />
+		</jsp:include>
 	</c:forEach>
 </div>
