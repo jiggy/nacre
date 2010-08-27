@@ -34,10 +34,18 @@ public class FormFactoryTest {
 	public void testQuery() {
 		setup();
 
-		Field author = formFactory.query("/type::Article//element::byline");
-		assertNotNull(author);
-		assertEquals(author.getName(), "byline");
-		assertEquals(author.getDecoration().getLabel(), "Byline");
+		Field ketchup = formFactory.query("/Article/ketchupOrMustard/ketchup");
+		assertNotNull(ketchup);
+		assertEquals(ketchup.getName(), "ketchup");
+		assertEquals(ketchup.getDecoration().getLabel(), "Ketchup");
+		
+		Field headline = formFactory.query("/Article/headline");
+		assertNotNull(headline);
+		assertEquals(3, headline.getMaxOccurs());
+		
+		Field service = formFactory.query("/Article/byline@service");
+		assertNotNull(service);
+		assertTrue(service.isAttribute());
 	}
 	
 }

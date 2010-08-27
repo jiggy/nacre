@@ -44,7 +44,15 @@
     <complexType name="Article">
     	<sequence>
     		<element name="body" type="string" />
-    		<element name="headLine" maxOccurs="3" minOccurs="2">
+    		<element name="ketchupOrMustard">
+    			<complexType>
+    				<choice>
+    					<element name="mustard" type="string" />
+    					<element name="ketchup" type="string" />
+    				</choice>
+    			</complexType>
+    		</element>
+    		<element name="headline" maxOccurs="3" minOccurs="2">
     			<simpleType>
     				<restriction base="string">
     					<minLength value="8" />

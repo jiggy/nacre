@@ -39,14 +39,29 @@ nacre.init = function() {
 	nacre.initHandlers();
 }
 
-nacre.initHandlers = function() {	
+nacre.initHandlers = function() {
+	var pathToQuery = function(path) {
+		return path.replace(new RegExp(/\[.+\]/g), "");
+//		var query = "";
+//		$.each(path.replace(new RegExp(/\[.+\]/g), "").split("/"), function(idx,token) {
+//			if (token != '') {
+//				if (query == "") {
+//					query += "/~" + token;
+//				} else {
+//					query += "//" + token;
+//				}
+//			}
+//		});
+//		return query;
+	};
 	$(".datepicker").datepicker();
 
 	$(".replicate-plus").click(function() {
 		var containerId = $(this).val();
-		var container = $("#"+containerId.replace(new RegExp("/","g"), "\\/"));
+		console.log("path: " + containerId + ", query: " + pathToQuery(containerId));
+		var container = $(this).parents(".repeater-container");
 		console.log("add a " + containerId);
-		var query = "/type::" + containerId.replace(new RegExp("/","g"), "//element::");
+		var query = pathToQuery(containerId);
 		console.log("query is " + query);
 		$.ajax({
 			url:"FormServlet?query=" + query,
@@ -59,6 +74,20 @@ nacre.initHandlers = function() {
 	});
 	$(".replicate-minus").click(function() {
 		console.log("minus!");
+		return false;
+	});
+	$(".choice-selector a").click(function() {
+		var container = $(this).parents(".repeater-container");
+		var containerId = container.attr("id");
+		var query = pathToQuery(containerId + "/" + $(this).text());
+		console.log($(this).text() + " chosen, container is " + containerId + " query is " + query);
+		$.ajax({
+			url:"FormServlet?query=" + query,
+			success:function(data) {
+				console.log(data);
+				container.find(".choice-selector").replaceWith($(data));
+			}
+		});
 		return false;
 	});
 };

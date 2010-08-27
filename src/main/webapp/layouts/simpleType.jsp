@@ -9,7 +9,7 @@
 	</jsp:include>
 </div>
 <div class="simpleContent-controls col"><c:if test="${field.maxOccurs gt 1}">
-	<button class="replicate-plus" title="Add a ${field.name}" value="${id}">+</button>
+	<button class="replicate-plus" title="Add a ${field.name}" value="${param.path}">+</button>
 	<button class="replicate-minus" title="Remove this ${field.name}">-</button>
 </c:if>
 </div>

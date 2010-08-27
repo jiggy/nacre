@@ -6,6 +6,7 @@ import java.util.List;
 public class ComplexType extends Field {
 	
 	private List<Field> fields;
+	private CombinationType combinationType;
 
 	public List<Field> getFields() {
 		if (fields == null) {
@@ -21,6 +22,18 @@ public class ComplexType extends Field {
 	@Override
 	public FieldType getFieldType() {
 		return FieldType.ComplexType;
+	}
+	
+	public void setCombinationType(CombinationType combinationType) {
+		this.combinationType = combinationType;
+	}
+
+	public CombinationType getCombinationType() {
+		return combinationType;
+	}
+
+	public enum CombinationType {
+		and,or;
 	}
 
 }
