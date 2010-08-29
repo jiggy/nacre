@@ -64,7 +64,7 @@ nacre.initHandlers = function() {
 		var query = pathToQuery(containerId);
 		console.log("query is " + query);
 		$.ajax({
-			url:"FormServlet?query=" + query,
+			url:"FormServlet?query=" + escape(query) + "&id=" + escape(nacre.nextId(containerId)),
 			success:function(data) {
 				console.log(data);
 				container.after($(data));
@@ -95,5 +95,13 @@ nacre.initHandlers = function() {
 var rules = {};
 
 nacre.getField = function(selector) {
-	return $("#" + selector.replace(new RegExp("/","g"), "\\/"));
+	selector = "#" + selector.replace(new RegExp("([/\\]\\[])","g"),"\\$1")
+	console.log(selector);
+	return $(selector);
 };
+
+nacre.nextId = function(containerId) {
+	var i = 0;
+	while (nacre.getField(containerId + "[" + i + "]").length > 0) i++;
+	return containerId + "[" + i + "]";
+}
