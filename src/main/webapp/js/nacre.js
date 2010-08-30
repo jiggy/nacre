@@ -64,7 +64,7 @@ nacre.initHandlers = function() {
 		var query = pathToQuery(containerId);
 		console.log("query is " + query);
 		$.ajax({
-			url:"FormServlet?query=" + escape(query) + "&id=" + escape(nacre.nextId(containerId)),
+			url:"FormServlet?query=" + escape(query) + "&path=" + escape(nacre.nextId(containerId)),
 			success:function(data) {
 				console.log(data);
 				container.after($(data));
@@ -82,7 +82,7 @@ nacre.initHandlers = function() {
 		var query = pathToQuery(containerId + "/" + $(this).text());
 		console.log($(this).text() + " chosen, container is " + containerId + " query is " + query);
 		$.ajax({
-			url:"FormServlet?query=" + query,
+			url:"FormServlet?query=" + escape(query) + "&path=" + escape(nacre.nextId(containerId) + "/" + $(this).text()),
 			success:function(data) {
 				console.log(data);
 				container.find(".choice-selector").replaceWith($(data));
@@ -101,6 +101,7 @@ nacre.getField = function(selector) {
 };
 
 nacre.nextId = function(containerId) {
+	containerId = containerId.replace(/\[\d+\]$/,"");
 	var i = 0;
 	while (nacre.getField(containerId + "[" + i + "]").length > 0) i++;
 	return containerId + "[" + i + "]";

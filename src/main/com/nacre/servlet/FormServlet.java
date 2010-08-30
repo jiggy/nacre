@@ -50,8 +50,10 @@ public class FormServlet extends HttpServlet {
 			request.getRequestDispatcher("/layouts/nacre.jsp").include(request, response);
 		} else if (request.getParameter("query") != null) {
 			Field field = formFactory.query(request.getParameter("query"));
+			String path = request.getParameter("path");
 			request.setAttribute("field", field);
-			request.getRequestDispatcher("/layouts/field.jsp").include(request, response);
+			request.setAttribute("path", path);
+			request.getRequestDispatcher("/layouts/instance.jsp").include(request, response);
 		}
 	}
 }
