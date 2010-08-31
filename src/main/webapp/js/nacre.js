@@ -28,9 +28,7 @@ nacre.addValidatorMethods = function() {
 
 };
 
-console.log("nacre!");
 $().ready(function() {
-	console.log("ready!");
 	nacre.init();
 });
 nacre.init = function() {
@@ -58,15 +56,11 @@ nacre.initHandlers = function() {
 
 	$(".replicate-plus").click(function() {
 		var containerId = $(this).val();
-		console.log("path: " + containerId + ", query: " + pathToQuery(containerId));
 		var container = $(this).parents(".repeater-container");
-		console.log("add a " + containerId);
 		var query = pathToQuery(containerId);
-		console.log("query is " + query);
 		$.ajax({
 			url:"FormServlet?query=" + escape(query) + "&path=" + escape(nacre.nextId(containerId)),
 			success:function(data) {
-				console.log(data);
 				container.after($(data));
 			}
 		});
@@ -84,7 +78,6 @@ nacre.initHandlers = function() {
 		$.ajax({
 			url:"FormServlet?query=" + escape(query) + "&path=" + escape(nacre.nextId(containerId) + "/" + $(this).text()),
 			success:function(data) {
-				console.log(data);
 				container.find(".choice-selector").replaceWith($(data));
 			}
 		});
@@ -95,9 +88,7 @@ nacre.initHandlers = function() {
 var rules = {};
 
 nacre.getField = function(selector) {
-	selector = "#" + selector.replace(new RegExp("([/\\]\\[])","g"),"\\$1")
-	console.log(selector);
-	return $(selector);
+	return $("input#" + selector.replace(new RegExp("([/\\]\\[])","g"),"\\$1"));
 };
 
 nacre.nextId = function(containerId) {
@@ -105,4 +96,27 @@ nacre.nextId = function(containerId) {
 	var i = 0;
 	while (nacre.getField(containerId + "[" + i + "]").length > 0) i++;
 	return containerId + "[" + i + "]";
-}
+};
+
+nacre.getInstances = function(containerId) {
+	var i = 0;
+	var fields = [];
+	while (nacre.getField(containerId + "["+i+"]").length > 0) {
+		fields.push(nacre.getField(containerId + "["+i+"]"))
+		i++;
+	}
+	return fields;
+};
+
+nacre.getAllInstances = function(path) {
+	var tokens = path.split("/");
+	var subpath = "";
+	$.each(tokens,function(idx,token) {
+		if (token == '') return;
+		subpath += "/" + token;
+		if (idx > 0) {
+			var instances = nacre.getInstances(subpath);
+			$.each(instances,function(x,i){console.log("inst:"+i.attr("id"));});
+		}
+	});
+};
