@@ -40,17 +40,6 @@ nacre.init = function() {
 nacre.initHandlers = function() {
 	var pathToQuery = function(path) {
 		return path.replace(new RegExp(/\[.+\]/g), "");
-//		var query = "";
-//		$.each(path.replace(new RegExp(/\[.+\]/g), "").split("/"), function(idx,token) {
-//			if (token != '') {
-//				if (query == "") {
-//					query += "/~" + token;
-//				} else {
-//					query += "//" + token;
-//				}
-//			}
-//		});
-//		return query;
 	};
 	$(".datepicker").datepicker();
 
