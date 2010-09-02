@@ -77,7 +77,7 @@ nacre.initHandlers = function() {
 var rules = {};
 
 nacre.getField = function(selector) {
-	return $("input#" + selector.replace(new RegExp("([/\\]\\[])","g"),"\\$1"));
+	return $("input#" + selector.replace(new RegExp("([@/\\]\\[])","g"),"\\$1"));
 };
 
 nacre.nextId = function(containerId) {
@@ -106,6 +106,20 @@ nacre.getAllInstances = function(path) {
 		if (idx > 0) {
 			var instances = nacre.getInstances(subpath);
 			$.each(instances,function(x,i){console.log("inst:"+i.attr("id"));});
+		}
+	});
+};
+
+nacre.serializeForm = function() {
+	var type = "Article";
+	var doc = document.implementation.createDocument("http://www.nacre.com/test",type);
+	$.each($(".fieldid"),function(i,e){
+		var field = nacre.getField($(e).val());
+		console.log(field.attr("id") + "=" + field.val());
+		var path = field.attr("id");
+		path = path.substr(type.length + 1);
+		while (path.indexOf("/") == 0) {
+			console.log(path);
 		}
 	});
 };
