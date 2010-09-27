@@ -84,7 +84,7 @@ nacre.initHandlers = function() {
 var rules = {};
 
 nacre.getField = function(selector) {
-	return $("input#" + selector.replace(new RegExp("([/\\]\\[])","g"),"\\$1"));
+	return $("input#" + selector.replace(new RegExp("([/\\]\\[\\@])","g"),"\\$1"));
 };
 
 nacre.nextId = function(containerId) {
@@ -145,9 +145,9 @@ nacre.serializeForm = function() {
 		});
 		if (path.indexOf("@") > -1) {
 			// attribute
-			var field = path.substr(0,path.indexOf("@"));
+			var fieldName = path.substr(0,path.indexOf("@"));
 			path = path.substr(path.indexOf("#")+1);
-			if (node[field] == undefined) node[field] = {};
+			if (node[fieldName] == undefined) node[fieldName] = {};
 			if (node['attributes'] == undefined) node['attributes'] = {};
 			node['attributes'][path] = field.val();
 		} else {
