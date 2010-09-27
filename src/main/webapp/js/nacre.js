@@ -34,6 +34,13 @@ $().ready(function() {
 nacre.init = function() {
 	nacre.addValidatorMethods();
 	$("#nacreForm").validate({'rules':rules});
+	$("a#Save").click(function(e) {
+		console.log("saving...");
+		e.preventDefault();
+		nacre.serializeForm();
+		return false;
+	});
+
 	nacre.initHandlers();
 }
 
@@ -108,4 +115,45 @@ nacre.getAllInstances = function(path) {
 			$.each(instances,function(x,i){console.log("inst:"+i.attr("id"));});
 		}
 	});
+};
+
+nacre.serializeForm = function() {
+	var tree = {};
+	console.log("Serializing...");
+	$.each($(".fieldid"), function(idx,elem) {
+		var xpath = $(elem).val();
+		var field = nacre.getField(xpath);
+		console.log("field: " + xpath + "," + field.attr("id"));
+		var path = xpath.substr(1); // strip leading "/"
+		var containers = [];
+		while (path.indexOf("/") > -1) { // another container
+			var container = path.substr(0,path.indexOf("/"));
+			path = path.substr(path.indexOf("/")+1);
+			console.log("sub path " + path);
+			containers.push(container);
+		}
+		console.log("parsed field: " + path + " containers: " + containers);
+		var node = undefined;
+		$.each(containers, function(i,n) {
+			if (node == undefined) {
+				if (tree[n] == undefined) tree[n] = {};
+				node = tree[n];
+			} else {
+				if (node[n] == undefined) node[n] = {};
+				node = node[n];
+			}
+		});
+		if (path.indexOf("@") > -1) {
+			// attribute
+			var field = path.substr(0,path.indexOf("@"));
+			path = path.substr(path.indexOf("#")+1);
+			if (node[field] == undefined) node[field] = {};
+			if (node['attributes'] == undefined) node['attributes'] = {};
+			node['attributes'][path] = field.val();
+		} else {
+			node[path] = field.val();
+		}
+	});
+	console.log(tree);
+	return tree;
 };
