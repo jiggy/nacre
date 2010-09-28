@@ -34,6 +34,13 @@ $().ready(function() {
 nacre.init = function() {
 	nacre.addValidatorMethods();
 	$("#nacreForm").validate({'rules':rules});
+	$("a#Save").click(function(e) {
+		console.log("saving...");
+		e.preventDefault();
+		nacre.serializeForm();
+		return false;
+	});
+
 	nacre.initHandlers();
 }
 
@@ -111,15 +118,42 @@ nacre.getAllInstances = function(path) {
 };
 
 nacre.serializeForm = function() {
-	var type = "Article";
-	var doc = document.implementation.createDocument("http://www.nacre.com/test",type);
-	$.each($(".fieldid"),function(i,e){
-		var field = nacre.getField($(e).val());
-		console.log(field.attr("id") + "=" + field.val());
-		var path = field.attr("id");
-		path = path.substr(type.length + 1);
-		while (path.indexOf("/") == 0) {
-			console.log(path);
+	var tree = {};
+	console.log("Serializing...");
+	$.each($(".fieldid"), function(idx,elem) {
+		var xpath = $(elem).val();
+		var field = nacre.getField(xpath);
+		console.log("field: " + xpath + "," + field.attr("id"));
+		var path = xpath.substr(1); // strip leading "/"
+		var containers = [];
+		while (path.indexOf("/") > -1) { // another container
+			var container = path.substr(0,path.indexOf("/"));
+			path = path.substr(path.indexOf("/")+1);
+			console.log("sub path " + path);
+			containers.push(container);
+		}
+		console.log("parsed field: " + path + " containers: " + containers);
+		var node = undefined;
+		$.each(containers, function(i,n) {
+			if (node == undefined) {
+				if (tree[n] == undefined) tree[n] = {};
+				node = tree[n];
+			} else {
+				if (node[n] == undefined) node[n] = {};
+				node = node[n];
+			}
+		});
+		if (path.indexOf("@") > -1) {
+			// attribute
+			var fieldName = path.substr(0,path.indexOf("@"));
+			path = path.substr(path.indexOf("#")+1);
+			if (node[fieldName] == undefined) node[fieldName] = {};
+			if (node['attributes'] == undefined) node['attributes'] = {};
+			node['attributes'][path] = field.val();
+		} else {
+			node[path] = field.val();
 		}
 	});
+	console.log(tree);
+	return tree;
 };

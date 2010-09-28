@@ -17,7 +17,7 @@
 </head>
 <body>
 <c:forEach items="${form.actions}" var="action">
-	<a href="${action.uri}">${action.label}</a><br />
+	<a class="action" id="${action.label}" href="${action.uri}">${action.label}</a><br />
 </c:forEach>
 <form name="nacreForm" id="nacreForm">
 <c:forEach items="${form.form.fields}" var="field">
