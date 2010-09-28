@@ -210,21 +210,23 @@ public class ParsingUtils {
 		}
 	
 		public Field simpleType(XSSimpleType type) {
-			System.out.println("simple type " + type.getName() + " is " + (type.isRestriction() ? "restriction" : "simple simple"));
+			
+			System.out.println("simple type " + type.getName() + " is " + (type.isRestriction() ? "restriction" : "simple simple") + " base type " + type.isPrimitive());
+			SimpleType st;
 			if (type.isRestriction()) {
-				XSRestrictionSimpleType restriction = type.asRestriction();
-				return getRestriction(restriction);
+				st = getRestriction(type.asRestriction());
 			} else {
-				SimpleType st = new SimpleType();
-				st.setName(type.getName());
-				st.setBaseType(type.getBaseType().getName());
-				return st;
+				st = new SimpleType();
 			}
+			st.setName(type.getName());
+			if (type.isPrimitive()) {
+				st.setBaseType(type.getPrimitiveType().getName());
+			}
+			return st;
 		}
 	
-		private Field getRestriction(XSRestrictionSimpleType restriction) {
+		private SimpleType getRestriction(XSRestrictionSimpleType restriction) {
 			SimpleType field = new SimpleType();
-			System.out.println("\t\t restriction base " + restriction.getBaseType().getName() + ", facets: " + restriction.getDeclaredFacets().size());
 			field.setMaxLength(NumberUtils.createInteger(getFacet(restriction, XSFacet.FACET_MAXLENGTH)));
 			field.setMinLength(NumberUtils.createInteger(getFacet(restriction, XSFacet.FACET_MINLENGTH)));
 			field.setLength(NumberUtils.createInteger(getFacet(restriction, XSFacet.FACET_LENGTH)));
@@ -244,7 +246,9 @@ public class ParsingUtils {
 				field.setWhitespace(SimpleType.WhiteSpaceRestriction.valueOf(ws));
 			}
 	
-			field.setBaseType(restriction.getBaseType().getName());
+			if (restriction.getBaseType() != null) {
+				field.setBaseType(restriction.getBaseType().getName());
+			}
 			return field;
 		}
 	
@@ -263,7 +267,10 @@ public class ParsingUtils {
 			System.out.println("\telem " + elem.getName() + " " + elem.getType().getName() + " ns: " + elem.getType().getTargetNamespace());
 			if (elem.getType().getName() == null) {
 				// anonymous restriction or complex type
-				field = elem.getType().isSimpleType() ? elem.getType().asSimpleType().apply(nacreXSOMFunction) : elem.getType().asComplexType().apply(nacreXSOMFunction);
+				System.out.println("type name is null, simple? " + elem.getType().isSimpleType() + ", complex? " + elem.getType().isComplexType());
+				field = elem.getType().isSimpleType() ?
+							elem.getType().asSimpleType().apply(nacreXSOMFunction) :
+							elem.getType().asComplexType().apply(nacreXSOMFunction);
 			} else if (!elem.getType().getTargetNamespace().equals(FormFactory.XSD_NAMESPACE)) {
 				// user-defined type
 				if (elem.getType().isComplexType()) {
@@ -299,9 +306,15 @@ public class ParsingUtils {
 	
 		public Field complexType(XSComplexType type) {
 			XSParticle particle = type.getContentType().asParticle();
-			ComplexType vo = (ComplexType) particle.apply(nacreXSOMFunction);
+			Field vo;
+			if (particle != null) {
+				vo = particle.apply(nacreXSOMFunction);
+			} else {
+				// this is a simple type with attributes
+				vo = type.getContentType().asSimpleType().apply(nacreXSOMFunction);
+			}
 			for (XSAttributeUse attr : type.getAttributeUses()) {
-				vo.getFields().add(attr.apply(nacreXSOMFunction));
+				vo.getAttributes().add(attr.apply(nacreXSOMFunction));
 			}
 			vo.setName(type.getName());
 			

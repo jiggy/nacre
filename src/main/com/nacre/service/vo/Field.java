@@ -1,11 +1,26 @@
 package com.nacre.service.vo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class Field {
 	private String id;
 	private String name;
 	private int minOccurs;
 	private int maxOccurs;
 	private Decoration decoration;
+	private List<Field> attributes;
+
+	public List<Field> getAttributes() {
+		if (attributes == null) {
+			attributes = new ArrayList<Field>();
+		}
+		return attributes;
+	}
+
+	public void setAttributes(List<Field> attributes) {
+		this.attributes = attributes;
+	}
 
 	public String getId() {
 		return id;

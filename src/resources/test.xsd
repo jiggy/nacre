@@ -11,16 +11,23 @@
 	<complexType name="byline">
 		<sequence>
 			<element name="author" type="tns:Author" />
-			<element name="publishDate" type="date">
+			<element name="publishDate">
 				<annotation>
 					<appinfo>
 						<ncr:label label="Publish Date" />
 					</appinfo>
 				</annotation>
+				<complexType>
+					<simpleContent>
+						<extension base="date"> <!-- TODO: change extension to restriction and it chokes, is that valid? -->
+							<attribute name="isWeekday" type="boolean" />
+						</extension>
+					</simpleContent>
+				</complexType>
 			</element>
-			<element name="location" type="tns:location" />
+			<element name="location" type="tns:location">
+			</element>
 		</sequence>
-		<attribute name="service" type="boolean" />
 		<attribute name="thing">
 			<simpleType>
 				<restriction base="string">

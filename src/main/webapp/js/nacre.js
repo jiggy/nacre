@@ -156,15 +156,21 @@ nacre.serializeForm = function() {
 	var serialize = function(doc,obj) {
 		console.log("doc is " + toString(doc));
 		for (var i in obj) {
-			if (i == 'attributes') continue;
-			var tagName = i.replace(/\[\d+\]$/,"")
-			console.log("adding [" + i + "]");
-			var chld = xdoc.createElement(tagName);
-			doc.appendChild(chld);
-			if ($.isPlainObject(obj[i])) {
-				serialize(chld,obj[i]);
+			if (i == 'attributes') {
+				for (var a in obj[i]) {
+					console.log("attribute " + a);
+					doc.setAttribute(a, obj[i][a]);
+				}
 			} else {
-				doc.appendChild(xdoc.createTextNode(obj[i]));
+				var tagName = i.replace(/\[\d+\]$/,"")
+				console.log("adding [" + tagName + "]");
+				var chld = xdoc.createElement(tagName);
+				doc.appendChild(chld);
+				if ($.isPlainObject(obj[i])) {
+					serialize(chld,obj[i]);
+				} else {
+					chld.appendChild(xdoc.createTextNode(obj[i]));
+				}
 			}
 		}
 	};

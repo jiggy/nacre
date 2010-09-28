@@ -19,3 +19,12 @@
 			</div>
 	</c:otherwise>
 </c:choose>
+<c:if test="${!empty field.attributes}">
+	<c:set var="path" value="${param.path}/${field.name}" />
+	<c:forEach items="${field.attributes}" var="attr">
+		<c:set var="field" value="${attr}" scope="request" />
+		<jsp:include page="field.jsp">
+			<jsp:param name="path" value="${path}" />
+		</jsp:include>
+	</c:forEach>
+</c:if>
