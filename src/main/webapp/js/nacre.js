@@ -122,32 +122,26 @@ nacre.serializeForm = function() {
 	console.log("Serializing...");
 	$.each($(".fieldid"), function(idx,elem) {
 		var xpath = $(elem).val();
+		console.log("field: " + xpath);
 		var field = nacre.getField(xpath);
-		console.log("field: " + xpath + "," + field.attr("id"));
 		var path = xpath.substr(1); // strip leading "/"
 		var containers = [];
 		while (path.indexOf("/") > -1) { // another container
 			var container = path.substr(0,path.indexOf("/"));
 			path = path.substr(path.indexOf("/")+1);
-			console.log("sub path " + path);
 			containers.push(container);
 		}
-		console.log("parsed field: " + path + " containers: " + containers);
-		var node = undefined;
+		var node = tree;
 		$.each(containers, function(i,n) {
-			if (node == undefined) {
-				if (tree[n] == undefined) tree[n] = {};
-				node = tree[n];
-			} else {
-				if (node[n] == undefined) node[n] = {};
-				node = node[n];
-			}
+			if (node[n] == undefined) node[n] = {};
+			node = node[n];
 		});
 		if (path.indexOf("@") > -1) {
 			// attribute
 			var fieldName = path.substr(0,path.indexOf("@"));
-			path = path.substr(path.indexOf("#")+1);
+			path = path.substr(path.indexOf("@")+1);
 			if (node[fieldName] == undefined) node[fieldName] = {};
+			node = node[fieldName];
 			if (node['attributes'] == undefined) node['attributes'] = {};
 			node['attributes'][path] = field.val();
 		} else {
@@ -155,5 +149,21 @@ nacre.serializeForm = function() {
 		}
 	});
 	console.log(tree);
+	var serialize = function(doc,obj) {
+		for (var i in obj) {
+			if (i == 'attributes') continue;
+			var chld = $(i);
+			console.log("adding " + i + " to xml doc " + chld);
+			doc.appendChild(chld);
+/*			if ($.isPlainObject(obj[i])) {
+				serialize(chld,obj[i]);
+			} else {
+				doc.appendChild(doc.createTextNode(obj[i]));
+			}*/
+		}
+	};
+	var doc = document.implementation.createDocument("ns","root",null);
+	serialize(doc,tree);
+	console.log(doc);
 	return tree;
 };
