@@ -149,21 +149,27 @@ nacre.serializeForm = function() {
 		}
 	});
 	console.log(tree);
+	var toString = function(doc) {
+		return new XMLSerializer().serializeToString(doc);
+	};
+	var xdoc = document.implementation.createDocument("ns","root",null);
 	var serialize = function(doc,obj) {
+		console.log("doc is " + toString(doc));
 		for (var i in obj) {
 			if (i == 'attributes') continue;
-			var chld = $(i);
-			console.log("adding " + i + " to xml doc " + chld);
+			var tagName = i.replace(/\[\d+\]$/,"")
+			console.log("adding [" + i + "]");
+			var chld = xdoc.createElement(tagName);
 			doc.appendChild(chld);
-/*			if ($.isPlainObject(obj[i])) {
+			if ($.isPlainObject(obj[i])) {
 				serialize(chld,obj[i]);
 			} else {
-				doc.appendChild(doc.createTextNode(obj[i]));
-			}*/
+				doc.appendChild(xdoc.createTextNode(obj[i]));
+			}
 		}
 	};
-	var doc = document.implementation.createDocument("ns","root",null);
-	serialize(doc,tree);
-	console.log(doc);
+	serialize(xdoc.getElementsByTagName("root")[0],tree);
+	console.log(xdoc);
+	console.log(toString(xdoc));
 	return tree;
 };
