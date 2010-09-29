@@ -35,9 +35,11 @@ nacre.init = function() {
 	nacre.addValidatorMethods();
 	$("#nacreForm").validate({'rules':rules});
 	$("a#Save").click(function(e) {
-		console.log("saving...");
 		e.preventDefault();
-		nacre.serializeForm();
+		var doc = nacre.serializeForm();
+		$.post("/nacre/XMLPostServlet", {xml:new XMLSerializer().serializeToString(doc)}, function(data,status,request) {
+			console.log("status: " + status);
+		});
 		return false;
 	});
 
@@ -70,7 +72,6 @@ nacre.initHandlers = function() {
 		var container = $(this).parents(".repeater-container");
 		var containerId = container.attr("id");
 		var query = pathToQuery(containerId + "/" + $(this).text());
-		console.log($(this).text() + " chosen, container is " + containerId + " query is " + query);
 		$.ajax({
 			url:"FormServlet?query=" + escape(query) + "&path=" + escape(nacre.nextId(containerId) + "/" + $(this).text()),
 			success:function(data) {
@@ -119,10 +120,8 @@ nacre.getAllInstances = function(path) {
 
 nacre.serializeForm = function() {
 	var tree = {};
-	console.log("Serializing...");
 	$.each($(".fieldid"), function(idx,elem) {
 		var xpath = $(elem).val();
-		console.log("field: " + xpath);
 		var field = nacre.getField(xpath);
 		var path = xpath.substr(1); // strip leading "/"
 		var containers = [];
@@ -133,7 +132,6 @@ nacre.serializeForm = function() {
 		}
 		var node = tree;
 		$.each(containers, function(i,n) {
-			console.log("container is " + n);
 			if (node[n] == undefined) node[n] = {};
 			node = node[n];
 		});
@@ -141,7 +139,6 @@ nacre.serializeForm = function() {
 			// attribute
 			var fieldName = path.substr(0,path.indexOf("@"));
 			path = path.substr(path.indexOf("@")+1);
-			console.log("attribute " + path + " for field " + fieldName);
 			if (node[fieldName] == undefined) node[fieldName] = {};
 			node = node[fieldName];
 			if (node['attributes'] == undefined) node['attributes'] = {};
@@ -151,24 +148,20 @@ nacre.serializeForm = function() {
 			node[path]['value'] = field.val();
 		}
 	});
-	console.log(tree);
 	var toString = function(doc) {
 		return new XMLSerializer().serializeToString(doc);
 	};
 	var xdoc = document.implementation.createDocument("","",null); // namespace, root node, doctype
 	var serialize = function(doc,obj) {
-		console.log("doc is " + toString(doc));
 		for (var i in obj) {
 			if (i == 'value') {
 				doc.appendChild(xdoc.createTextNode(obj[i]));
 			} else if (i == 'attributes') {
 				for (var a in obj[i]) {
-					console.log("attribute " + a);
 					doc.setAttribute(a, obj[i][a]);
 				}
 			} else {
 				var tagName = i.replace(/\[\d+\]$/,"")
-				console.log("adding [" + tagName + "]");
 				var chld = xdoc.createElement(tagName);
 				doc.appendChild(chld);
 				serialize(chld,obj[i]);
@@ -176,7 +169,5 @@ nacre.serializeForm = function() {
 		}
 	};
 	serialize(xdoc, tree);
-	console.log(xdoc);
-	console.log(toString(xdoc));
-	return tree;
+	return xdoc;
 };

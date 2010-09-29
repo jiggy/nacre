@@ -3,7 +3,6 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-
 	<jsp-property-group>
 		<url-pattern>*.jsp</url-pattern>
 		<el-enabled>true</el-enabled>
@@ -28,5 +27,13 @@
 	<servlet-mapping>
 		<servlet-name>FormServlet</servlet-name>
 		<url-pattern>/FormServlet</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-class>com.nacre.servlet.XMLPostServlet</servlet-class>
+		<servlet-name>XMLPostServlet</servlet-name>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>XMLPostServlet</servlet-name>
+		<url-pattern>/XMLPostServlet</url-pattern>
 	</servlet-mapping>
 </web-app>
