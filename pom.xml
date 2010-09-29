@@ -64,6 +64,15 @@
     <finalName>nacre</finalName>
   </build>
   <repositories>
+	<repository>
+		<id>flexgroup</id>
+		<name>public online Restlet repository</name>
+		<url>http://repository.sonatype.org/content/groups/flexgroup/</url>
+		<snapshots>
+			<enabled>false</enabled>
+			<updatePolicy>never</updatePolicy>
+		</snapshots>
+	</repository>
  	<repository>
 		<id>maven2-java-net</id>
 		<name>java net Maven Repository</name>
