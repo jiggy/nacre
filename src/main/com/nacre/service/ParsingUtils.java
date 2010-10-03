@@ -77,7 +77,10 @@ public class ParsingUtils {
 			log(exception);
 		}
 		private void log(SAXParseException exception) {
+			System.out.println("Error in " + exception.getPublicId() + " at " +
+					exception.getLineNumber() + ":" + exception.getColumnNumber());
 			System.out.println(exception.getMessage());
+			System.out.println(exception.getCause());
 			exception.printStackTrace();
 		}
 	};
@@ -210,7 +213,6 @@ public class ParsingUtils {
 		}
 	
 		public Field simpleType(XSSimpleType type) {
-			
 			System.out.println("simple type " + type.getName() + " is " + (type.isRestriction() ? "restriction" : "simple simple") + " base type " + type.isPrimitive());
 			SimpleType st;
 			if (type.isRestriction()) {
@@ -218,6 +220,7 @@ public class ParsingUtils {
 			} else {
 				st = new SimpleType();
 			}
+			st.setNamespace(type.getTargetNamespace());
 			st.setName(type.getName());
 			if (type.isPrimitive()) {
 				st.setBaseType(type.getPrimitiveType().getName());
@@ -297,6 +300,7 @@ public class ParsingUtils {
 				field.setDecoration(dec);
 			}
 			field.setName(elem.getName());
+			field.setNamespace(elem.getTargetNamespace());
 			if (field.getFieldType().equals(Field.FieldType.SimpleType)) {
 				((SimpleType)field).setDefault(ObjectUtils.defaultIfNull(elem.getDefaultValue(), "").toString());
 				((SimpleType)field).setFixed(ObjectUtils.defaultIfNull(elem.getFixedValue(), "").toString());

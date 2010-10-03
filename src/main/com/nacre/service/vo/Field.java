@@ -6,6 +6,15 @@ import java.util.List;
 public abstract class Field {
 	private String id;
 	private String name;
+	private String namespace;
+	public String getNamespace() {
+		return namespace;
+	}
+
+	public void setNamespace(String namespace) {
+		this.namespace = namespace;
+	}
+
 	private int minOccurs;
 	private int maxOccurs;
 	private Decoration decoration;

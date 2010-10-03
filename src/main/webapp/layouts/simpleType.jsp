@@ -4,7 +4,10 @@
 <div class="col field-label">
 <label for="${field.name}">${!empty field.decoration && !empty field.decoration.label ? field.decoration.label : field.name}${field.required ? "*" : ""}</label></div>
 <div class="col field-input">
-	<input type="hidden" class="fieldid" value="${param.path}" />
+	<fieldset class="metadata">
+		<input type="hidden" class="fieldid" value="${param.path}" />
+		<input type="hidden" class="fieldns" value="${field.namespace}" />
+	</fieldset>
 	<jsp:include page="${field.baseType}.jsp">
 		<jsp:param name="id" value="${param.path}" />
 	</jsp:include>

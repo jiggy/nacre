@@ -59,3 +59,6 @@ div.complexContent-box {
 input.error {
 	background-color:#FAA;
 }
+fieldset.metadata {
+	display: none;
+}

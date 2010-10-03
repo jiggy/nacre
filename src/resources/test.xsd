@@ -8,6 +8,7 @@
 			<maxLength value="40" />
 		</restriction>
 	</simpleType>
+	<element name="Article" type="tns:Article" />
 	<complexType name="byline">
 		<sequence>
 			<element name="author" type="tns:Author" />

@@ -161,13 +161,16 @@ nacre.serializeForm = function() {
 					doc.setAttribute(a, obj[i][a]);
 				}
 			} else {
-				var tagName = i.replace(/\[\d+\]$/,"")
-				var chld = xdoc.createElement(tagName);
+				var tagName = i.replace(/\[\d+\]$/,"");
+				// TODO capture the real namespace from the schema
+				var chld = xdoc.createElementNS("http://www.nacre.com/test", tagName);
 				doc.appendChild(chld);
 				serialize(chld,obj[i]);
 			}
 		}
 	};
 	serialize(xdoc, tree);
+	xdoc.documentElement.setAttributeNS('http://www.w3.org/2001/XMLSchema-instance',
+	'xsi:schemaLocation', 'http://www.nacre.com/test test.xsd')
 	return xdoc;
 };
