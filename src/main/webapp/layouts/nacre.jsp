@@ -20,12 +20,14 @@
 	<a class="action" id="${action.label}" href="${action.uri}">${action.label}</a><br />
 </c:forEach>
 <form name="nacreForm" id="nacreForm">
+<fieldset id="root">
 <c:forEach items="${form.form.fields}" var="field">
 	<c:set var="field" value="${field}" scope="request" />
 	<jsp:include page="field.jsp">
 		<jsp:param name="path" value="/${param.type}" />
 	</jsp:include>
 </c:forEach>
+<fieldset>
 </form>
 </body>
 </html>

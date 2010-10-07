@@ -5,11 +5,11 @@
 <c:set var="thisField" value="${field}" />
 <c:choose>
 	<c:when test="${field.fieldType eq 'SimpleType'}">
-		<div class="field-box row">
+		<fieldset class="field-box row">
 			<jsp:include page="simpleType.jsp">
 				<jsp:param name="path" value="${param.path}" />
 			</jsp:include>
-		</div>
+		</fieldset>
 		<c:if test="${!empty thisField.attributes}">
 			<%-- field has attributes --%>
 			<c:forEach items="${thisField.attributes}" var="attr">
@@ -21,7 +21,7 @@
 		</c:if>
 	</c:when>
 	<c:otherwise>
-		<div class="field-box row">
+		<fieldset class="field-box row">
 			<jsp:include page="complexType.jsp">
 				<jsp:param name="path" value="${param.path}" />
 			</jsp:include>
@@ -34,6 +34,6 @@
 					</jsp:include>
 				</c:forEach>
 			</c:if>
-		</div>
+		</fieldset>
 	</c:otherwise>
 </c:choose>

@@ -62,8 +62,6 @@ public class FormFactoryTest {
 		SchemaFactory sf = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
 		sf.setErrorHandler(ParsingUtils.nacreXSOMErrorHandler);
 		try {
-			Document doc;
-			doc.
 			Schema s = sf.newSchema(this.getClass().getResource("/test.xsd"));
 			Validator v = s.newValidator();
 			v.validate(new StreamSource(this.getClass().getResourceAsStream(("/Article.xml"))));

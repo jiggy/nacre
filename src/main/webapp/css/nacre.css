@@ -14,10 +14,10 @@ em{font-style:italic;}
 */
 body {font: normal 62.5%/1.4em Verdana, sans-serif; cursor: default;}
 
-div.field-box {
+.field-box {
 	border: thin solid black; margin: 5px; background-color: #FFF;
 }
-div.complexContent-box {
+.complexContent-box {
 	background-color: #EEE;
 }
 .field-label {

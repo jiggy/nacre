@@ -11,12 +11,12 @@
 	<c:otherwise>
 		<%-- not an attribute --%>
 		<c:set var="id" value="${param.path}/${field.name}" />
-			<div id="${id}" class="repeater-container">
+			<fieldset id="${id}" class="repeater-container">
 				<c:forEach begin="1" end="${field.minOccurs == 0 ? 1 : field.minOccurs}" var="idx">
 					<jsp:include page="instance.jsp">
 						<jsp:param name="path" value="${id}[${idx - 1}]" />
 					</jsp:include>
 				</c:forEach>
-			</div>
+			</fieldset>
 	</c:otherwise>
 </c:choose>

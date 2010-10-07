@@ -2,15 +2,16 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <div class="col field-label">
-<label for="${field.name}">${!empty field.decoration && !empty field.decoration.label ? field.decoration.label : field.name}${field.required ? "*" : ""}</label></div>
+	<label for="${field.name}">${!empty field.decoration && !empty field.decoration.label ? field.decoration.label : field.name}${field.required ? "*" : ""}</label>
+</div>
 <div class="col field-input">
-	<fieldset class="metadata">
-		<input type="hidden" class="fieldid" value="${param.path}" />
-		<input type="hidden" class="fieldns" value="${field.namespace}" />
-	</fieldset>
+	<fieldset>
+	<input type="hidden" class="fieldid" value="${param.path}" />
+	<input type="hidden" class="fieldns" value="${field.namespace}" />
 	<jsp:include page="${field.baseType}.jsp">
 		<jsp:param name="id" value="${param.path}" />
 	</jsp:include>
+	</fieldset>
 </div>
 <div class="simpleContent-controls col"><c:if test="${field.maxOccurs gt 1}">
 	<button class="replicate-plus" title="Add a ${field.name}" value="${param.path}">+</button>
