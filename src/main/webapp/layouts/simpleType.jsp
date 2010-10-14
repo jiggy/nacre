@@ -7,7 +7,6 @@
 <div class="col field-input">
 	<fieldset>
 	<input type="hidden" class="fieldid" value="${param.path}" />
-	<input type="hidden" class="fieldns" value="${field.namespace}" />
 	<jsp:include page="${field.baseType}.jsp">
 		<jsp:param name="id" value="${param.path}" />
 	</jsp:include>

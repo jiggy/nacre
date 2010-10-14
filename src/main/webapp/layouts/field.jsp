@@ -12,6 +12,7 @@
 		<%-- not an attribute --%>
 		<c:set var="id" value="${param.path}/${field.name}" />
 			<fieldset id="${id}" class="repeater-container">
+				<input type="hidden" name="namespace" value="${field.namespace}" />
 				<c:forEach begin="1" end="${field.minOccurs == 0 ? 1 : field.minOccurs}" var="idx">
 					<jsp:include page="instance.jsp">
 						<jsp:param name="path" value="${id}[${idx - 1}]" />
@@ -20,3 +21,7 @@
 			</fieldset>
 	</c:otherwise>
 </c:choose>
+<%-- 
+field -> (name, path, namespace)
+instance -> (unique id)
+--%>
