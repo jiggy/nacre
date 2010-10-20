@@ -120,8 +120,12 @@ nacre.getAllInstances = function(path) {
 
 nacre.serializeForm = function() {
 	var tree = {};
-	$.each($(".fieldid"), function(idx,elem) {
-		var xpath = $(elem).val();
+	$.each($(".fieldid"), function(idx,e) {
+		var elem = $(e);
+		var parent = $(elem.parentsUntil("fieldset.field").parent()[0]);
+		var ns = parent.children("input[name=namespace]").val();
+		var xpath = elem.val();
+		console.log(ns+":"+xpath);
 		var field = nacre.getField(xpath);
 		var path = xpath.substr(1); // strip leading "/"
 		var containers = [];

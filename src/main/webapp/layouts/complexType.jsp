@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
-<fieldset class="complexContent-box" id="${param.path}">
+<fieldset class="complexContent" id="${param.path}">
 	<input type="hidden" class="fieldid" value="${param.path}" />
 	<input type="hidden" class="fieldns" value="${field.namespace}" />
 	<div class="complexContent-header row">

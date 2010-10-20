@@ -5,7 +5,7 @@
 <c:set var="thisField" value="${field}" />
 <c:choose>
 	<c:when test="${field.fieldType eq 'SimpleType'}">
-		<fieldset class="field-box row">
+		<fieldset class="instance field-box row">
 			<jsp:include page="simpleType.jsp">
 				<jsp:param name="path" value="${param.path}" />
 			</jsp:include>
@@ -21,7 +21,7 @@
 		</c:if>
 	</c:when>
 	<c:otherwise>
-		<fieldset class="field-box row">
+		<fieldset class="instance field-box row">
 			<jsp:include page="complexType.jsp">
 				<jsp:param name="path" value="${param.path}" />
 			</jsp:include>
