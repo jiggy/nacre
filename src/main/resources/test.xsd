@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:ncr="http://www.nacre.com/decorations"
+	targetNamespace="http://www.nacre.com/test"
+	xmlns:tns2="http://www.nacre.com/testns"
+	xmlns:tns="http://www.nacre.com/test" elementFormDefault="qualified" xmlns:pref="http://www.nacre.com/testns">
+	<import schemaLocation="./testns.xsd" namespace="http://www.nacre.com/testns"></import>
+	<simpleType name="Author">
+		<restriction base="string">
+			<maxLength value="40" />
+		</restriction>
+	</simpleType>
+	<element name="Article" type="tns:Article" />
+	<complexType name="byline">
+		<sequence>
+			<element name="author" type="tns:Author" />
+			<element name="publishDate">
+				<annotation>
+					<appinfo>
+						<ncr:label label="Publish Date" />
+					</appinfo>
+				</annotation>
+				<complexType>
+					<simpleContent>
+						<extension base="date"><!-- TODO: change extension to restriction and it chokes, is that valid? -->
+							<attribute name="isWeekday" type="boolean" />
+						</extension>
+					</simpleContent>
+				</complexType>
+			</element>
+			<element name="location" type="tns2:location"></element>
+		</sequence>
+		<attribute name="thing">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="80"></maxLength>
+				</restriction>
+			</simpleType>
+		</attribute>
+	</complexType>
+	<complexType name="Article">
+		<sequence>
+			<element name="body" type="string" />
+			<element name="ketchupOrMustard">
+				<complexType>
+					<choice>
+						<element name="mustard" type="string" />
+						<element name="ketchup" type="string" />
+					</choice>
+				</complexType>
+			</element>
+			<element name="headline" maxOccurs="3" minOccurs="2">
+				<simpleType>
+					<restriction base="string">
+						<minLength value="8" />
+						<maxLength value="80" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="byline" type="tns:byline" maxOccurs="2" />
+			<element name="eggs" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="integer">
+						<minExclusive value="6"></minExclusive>
+						<maxExclusive value="12"></maxExclusive>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="hex" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="^[0-9a-fA-F]+$"></pattern>
+					</restriction>
+				</simpleType>
+			</element>
+		</sequence>
+	</complexType>
+</schema>
