@@ -80,7 +80,9 @@ public class FormFactory
 		XSComplexType type = null;
 		for (XSSchema schema : parsed.getSchemas()) {
 			type = schema.getComplexType(name);
+			if (type != null) break;
 		}
+		if (type == null) return null;
 		return (ComplexType) type.apply(ParsingUtils.nacreXSOMFunction);
 	}
 
