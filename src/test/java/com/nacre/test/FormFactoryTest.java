@@ -14,6 +14,7 @@ import org.xml.sax.SAXException;
 
 import com.nacre.service.FormFactory;
 import com.nacre.service.ParsingUtils;
+import com.nacre.service.vo.ComplexType;
 import com.nacre.service.vo.Field;
 import com.nacre.service.vo.Form;
 
@@ -38,6 +39,14 @@ public class FormFactoryTest {
 		assertNotNull(art);
 		assertNotNull(art.getForm());
 		assertTrue(art.getForm().getFields().size() > 0);
+		ComplexType byline = (ComplexType) art.getForm().getFields().get(3);
+		assertEquals("byline", byline.getName());
+		Field pubdate = byline.getFields().get(1);
+		assertEquals("publishDate", pubdate.getName());
+		assertTrue(pubdate.getAttributes().size() > 0);
+		Field attr = pubdate.getAttributes().get(0);
+		System.out.println("Attr name " + attr.getName() + " ns [" + attr.getNamespace() + "]");
+		assertNotNull(attr.getNamespace());
 	}
 	
 	@Test

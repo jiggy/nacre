@@ -318,7 +318,9 @@ public class ParsingUtils {
 				vo = type.getContentType().asSimpleType().apply(nacreXSOMFunction);
 			}
 			for (XSAttributeUse attr : type.getAttributeUses()) {
-				vo.getAttributes().add(attr.apply(nacreXSOMFunction));
+				Field attrf = attr.apply(nacreXSOMFunction);
+				attrf.setNamespace(type.getTargetNamespace());
+				vo.getAttributes().add(attrf);
 			}
 			vo.setName(type.getName());
 			
