@@ -129,7 +129,8 @@ nacre.serializeField = function(fld, tabs) {
 	var ns = field.children("input[name=namespace]").val();
 	var type = field.children("input[name=type]").val();
 	var hasAttributes = field.children("input[name=hasAttributes]").val();
-	console.log(tabs + "field: " + $(fld).attr("id") + ", " + ns + ", " + type + ", attrs? " + hasAttributes);
+	console.log(tabs + "field: " + $(fld).attr("id") + ", " + ns + ", [" + type + "], attrs? " + hasAttributes);
+	console.log("complex? " + (type == 'ComplexType' ? "yes": "no"));
 	$.each($(fld).childrenUntil("fieldset.instance"),function(i,inst) {
 		console.log("instance " + i);
 		// may contain attrs, simple type, complex types
@@ -139,15 +140,17 @@ nacre.serializeField = function(fld, tabs) {
 			});
 		}
 		if (type == 'ComplexType') {
+			console.log("getting descendant fields");
 			$.each($(inst).childrenUntil("fieldset.field"), function(j,fld) {
 				nacre.serializeField(fld,tabs+"\t");
 			});
 		} else {
 			var path = $(inst).find("input.fieldid").val();
+			console.log("getting val from " + path);
 			var val = $(inst).find("#"+path).val();
 			console.log(tabs + "val: " + val);
 		}
-	});	
+	});
 };
 nacre.serializeFormX = function() {
 	var tree = {};
