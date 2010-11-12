@@ -178,24 +178,3 @@ nacre.serializeForm = function() {
 	'xsi:schemaLocation', 'http://www.nacre.com/test test.xsd')
 	return xdoc;
 };
-
-(function($) {
-	// BFS until we find a tier with matched nodes
-	$.fn.childUntil = function(selector) {
-		var matches = [];
-		var queue = [];
-		queue.push(this);
-		this.attr("visited", true);
-		while(matches.length == 0 && queue.length > 0) {
-			var node = queue.shift();
-			$.each(node.children("[visited!=true]"), function(idx,e) {
-				var child = $(e);
-				child.attr("visited",true);
-				queue.push(child);
-				if (child.is(selector)) matches.push(child);
-			});
-		}
-		$.each($("[visited=true]"),function(i,e) { $(e).removeAttr("visited"); });
-		return matches;
-	};
-})(jQuery);

@@ -12,6 +12,7 @@
 <link rel="stylesheet" type="text/css" href="${cp}/css/nacre.css" />
 <script type="text/javascript" src="${cp}/js/lib/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="${cp}/js/lib/jquery.validate.js"></script>
+<script type="text/javascript" src="${cp}/js/lib/jquery.childrenUntil.js"></script>
 <script type="text/javascript" src="${cp}/js/lib/jquery-ui-1.8.4.custom.min.js"></script>
 <script type="text/javascript" src="${cp}/js/nacre.js"></script>
 </head>
