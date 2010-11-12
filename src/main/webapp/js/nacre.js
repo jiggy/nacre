@@ -119,6 +119,37 @@ nacre.getAllInstances = function(path) {
 };
 
 nacre.serializeForm = function() {
+	$.each($("#root").childrenUntil("fieldset.field"),function(i,e) {
+		nacre.serializeField(e,'');
+	});
+};
+nacre.serializeField = function(fld, tabs) {
+	var field = $(fld);
+	var name = field.attr("id");
+	var ns = field.children("input[name=namespace]").val();
+	var type = field.children("input[name=type]").val();
+	var hasAttributes = field.children("input[name=hasAttributes]").val();
+	console.log(tabs + "field: " + $(fld).attr("id") + ", " + ns + ", " + type + ", attrs? " + hasAttributes);
+	$.each($(fld).childrenUntil("fieldset.instance"),function(i,inst) {
+		console.log("instance " + i);
+		// may contain attrs, simple type, complex types
+		if (hasAttributes == 'true') {
+			$.each($(inst).childrenUntil("fieldset.field"),function(j,attr) {
+				nacre.serializeField(attr,tabs+"\t@");
+			});
+		}
+		if (type == 'ComplexType') {
+			$.each($(inst).childrenUntil("fieldset.field"), function(j,fld) {
+				nacre.serializeField(fld,tabs+"\t");
+			});
+		} else {
+			var path = $(inst).find("input.fieldid").val();
+			var val = $(inst).find("#"+path).val();
+			console.log(tabs + "val: " + val);
+		}
+	});	
+};
+nacre.serializeFormX = function() {
 	var tree = {};
 	$.each($(".fieldid"), function(idx,e) {
 		var elem = $(e);

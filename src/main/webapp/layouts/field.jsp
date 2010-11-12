@@ -1,8 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <fieldset class="field" id="${field.name}">
 <legend>${field.name}</legend>
 <input type="hidden" name="namespace" value="${field.namespace}" />
+<input type="hidden" name="type" value="${field.fieldType}" />
+<input type="hidden" name="hasAttributes" value="${fn:length(field.attributes) > 0}" />
 <c:choose>
 	<c:when test="${field.attribute}">
 		<%-- this field is an attribute --%>

@@ -3,8 +3,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <fieldset class="complexContent" id="${param.path}">
-	<input type="hidden" class="fieldid" value="${param.path}" />
-	<input type="hidden" class="fieldns" value="${field.namespace}" />
 	<div class="complexContent-header row">
 		<legend class="complexContent-label col">${field.name}</legend>
 		<div class="complexContent-controls col"><c:if test="${field.maxOccurs gt 1}">

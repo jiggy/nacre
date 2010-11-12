@@ -29,7 +29,6 @@
 				<%-- field has attributes --%>
 				<c:forEach items="${thisField.attributes}" var="attr">
 					<c:set var="field" value="${attr}" scope="request" />
-					attrname:${attr.name}
 					<jsp:include page="field.jsp">
 						<jsp:param name="path" value="${param.path}" />
 					</jsp:include>
