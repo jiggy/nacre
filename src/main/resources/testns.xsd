@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:ncr="http://www.nacre.com/decorations"
+	targetNamespace="http://www.nacre.com/testns"
+	xmlns:tns="http://www.nacre.com/testns" elementFormDefault="qualified">
+	<complexType name="location">
+		<sequence>
+			<element name="country" type="string" />
+			<element name="location" type="string">
+				<annotation>
+					<appinfo>
+						<ncr:label label="Location Name" />
+					</appinfo>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+</schema>
