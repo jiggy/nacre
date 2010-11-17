@@ -13,13 +13,13 @@ strong{font-weight:bold;}
 em{font-style:italic;}
 */
 body {font: normal 62.5%/1.4em Verdana, sans-serif; cursor: default;}
-fieldset {padding: 0 0 0 0;}
+fieldset {padding: 0.25em;}
 
 .field-box {
 	border: thin solid black; margin: 5px; background-color: #FFF;
 }
 fieldset.complexContent {
-	background-color: #EEE;
+	/*background-color: #EEE;*/
 }
 .field-label {
 	width: 200px;

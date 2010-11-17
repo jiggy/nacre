@@ -3,29 +3,26 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <fieldset class="complexContent" id="${param.path}">
-	<div class="complexContent-header row">
-		<legend class="complexContent-label col">${field.name}</legend>
-		<div class="complexContent-controls col"><c:if test="${field.maxOccurs gt 1}">
-			<button class="replicate-plus" title="Add a ${field.name}" value="${param.path}">+</button>
-			<button class="replicate-minus" title="Remove this ${field.name}">-</button>
-		</c:if>
-		</div>
-	</div>
+	<legend>${field.name}</legend>
+	<%-- div class="complexContent-controls col"><c:if test="${field.maxOccurs gt 1}">
+		<button class="replicate-plus" title="Add a ${field.name}" value="${param.path}">+</button>
+		<button class="replicate-minus" title="Remove this ${field.name}">-</button>
+	</c:if></div>--%>
 	<c:choose>
-	<c:when test="${field.combinationType eq 'or'}">
-		<div class="choice-selector">
+		<c:when test="${field.combinationType eq 'or'}">
+			<div class="choice-selector">
+				<c:forEach items="${field.fields}" var="child">
+					<a href="#">${child.name}</a> 
+				</c:forEach>
+			</div>
+		</c:when>
+		<c:otherwise>
 			<c:forEach items="${field.fields}" var="child">
-				<a href="#">${child.name}</a> 
+				<c:set var="field" value="${child}" scope="request" />
+				<jsp:include page="field.jsp">
+					<jsp:param name="path" value="${param.path}" />
+				</jsp:include>
 			</c:forEach>
-		</div>
-	</c:when>
-	<c:otherwise>
-		<c:forEach items="${field.fields}" var="child">
-			<c:set var="field" value="${child}" scope="request" />
-			<jsp:include page="field.jsp">
-				<jsp:param name="path" value="${param.path}" />
-			</jsp:include>
-		</c:forEach>
-	</c:otherwise>
+		</c:otherwise>
 	</c:choose>
 </fieldset>
