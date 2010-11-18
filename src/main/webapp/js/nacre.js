@@ -119,6 +119,14 @@ nacre.getAllInstances = function(path) {
 };
 
 nacre.serializeForm = function() {
+	var serializeAttribute = function(fld, parent) {
+		var field = $(fld);
+		var name = field.attr("id");
+		$.each($(fld).childrenUntil("fieldset.instance"),function(i,inst) {
+			var val = $(inst).find("input.nacre-input-field").val();
+			parent.setAttribute(name, val);
+		});
+	};
 	var serializeField = function(fld, parent) {
 		var field = $(fld);
 		var name = field.attr("id");
@@ -139,7 +147,7 @@ nacre.serializeForm = function() {
 			}
 			if (hasAttributes == 'true') {
 				$.each($(inst).childrenUntil("fieldset.attribute"),function(j,attr) {
-					serializeField(attr,node);
+					serializeAttribute(attr,node);
 				});
 			}
 		});
