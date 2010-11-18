@@ -119,96 +119,37 @@ nacre.getAllInstances = function(path) {
 };
 
 nacre.serializeForm = function() {
-	$.each($("#root").childrenUntil("fieldset.field"),function(i,e) {
-		nacre.serializeField(e,'');
-	});
-};
-nacre.serializeField = function(fld, tabs) {
-	var field = $(fld);
-	var name = field.attr("id");
-	var ns = field.children("input[name=namespace]").val();
-	var type = field.children("input[name=type]").val();
-	var hasAttributes = field.children("input[name=hasAttributes]").val();
-	console.log(tabs + "field: " + $(fld).attr("id") + ", " + ns + ", [" + type + "], attrs? " + hasAttributes);
-	console.log("complex? " + (type == 'ComplexType' ? "yes": "no"));
-	$.each($(fld).childrenUntil("fieldset.instance"),function(i,inst) {
-		console.log("instance " + i);
-		// may contain attrs, simple type, complex types
-		if (hasAttributes == 'true') {
-			$.each($(inst).childrenUntil("fieldset.field"),function(j,attr) {
-				nacre.serializeField(attr,tabs+"\t@");
-			});
-		}
-		if (type == 'ComplexType') {
-			console.log("getting descendant fields");
-			$.each($(inst).childrenUntil("fieldset.field"), function(j,fld) {
-				nacre.serializeField(fld,tabs+"\t");
-			});
-		} else {
-			var path = $(inst).find("input.fieldid").val();
-			console.log("getting val from " + path);
-			var val = $(inst).find("#"+path).val();
-			console.log(tabs + "val: " + val);
-		}
-	});
-};
-nacre.serializeFormX = function() {
-	var tree = {};
-	$.each($(".fieldid"), function(idx,e) {
-		var elem = $(e);
-		var parent = $(elem.parentsUntil("fieldset.field").parent()[0]);
-		var ns = parent.children("input[name=namespace]").val();
-		var xpath = elem.val();
-		console.log(ns+":"+xpath);
-		var field = nacre.getField(xpath);
-		var path = xpath.substr(1); // strip leading "/"
-		var containers = [];
-		while (path.indexOf("/") > -1) { // another container
-			var container = path.substr(0,path.indexOf("/"));
-			path = path.substr(path.indexOf("/")+1);
-			containers.push(container);
-		}
-		var node = tree;
-		$.each(containers, function(i,n) {
-			if (node[n] == undefined) node[n] = {};
-			node = node[n];
-		});
-		if (path.indexOf("@") > -1) {
-			// attribute
-			var fieldName = path.substr(0,path.indexOf("@"));
-			path = path.substr(path.indexOf("@")+1);
-			if (node[fieldName] == undefined) node[fieldName] = {};
-			node = node[fieldName];
-			if (node['attributes'] == undefined) node['attributes'] = {};
-			node['attributes'][path] = field.val();
-		} else {
-			if (node[path] == undefined) node[path] = {}
-			node[path]['value'] = field.val();
-		}
-	});
-	var toString = function(doc) {
-		return new XMLSerializer().serializeToString(doc);
-	};
-	var xdoc = document.implementation.createDocument("","",null); // namespace, root node, doctype
-	var serialize = function(doc,obj) {
-		for (var i in obj) {
-			if (i == 'value') {
-				doc.appendChild(xdoc.createTextNode(obj[i]));
-			} else if (i == 'attributes') {
-				for (var a in obj[i]) {
-					doc.setAttribute(a, obj[i][a]);
-				}
+	var serializeField = function(fld, parent) {
+		var field = $(fld);
+		var name = field.attr("id");
+		var ns = field.children("input[name=namespace]").val();
+		var type = field.children("input[name=type]").val();
+		var hasAttributes = field.children("input[name=hasAttributes]").val();
+		var doc = parent.ownerDocument;
+		$.each($(fld).childrenUntil("fieldset.instance"),function(i,inst) {
+			var node = doc.createElementNS(ns, name);
+			parent.appendChild(node);
+			if (type == 'ComplexType') {
+				$.each($(inst).childrenUntil("fieldset.field"), function(j,fld) {
+					serializeField(fld,node);
+				});
 			} else {
-				var tagName = i.replace(/\[\d+\]$/,"");
-				// TODO capture the real namespace from the schema
-				var chld = xdoc.createElementNS("http://www.nacre.com/test", tagName);
-				doc.appendChild(chld);
-				serialize(chld,obj[i]);
+				var val = $(inst).find("input.nacre-input-field").val();
+				node.appendChild(doc.createTextNode(val));
 			}
-		}
+			if (hasAttributes == 'true') {
+				$.each($(inst).childrenUntil("fieldset.attribute"),function(j,attr) {
+					serializeField(attr,node);
+				});
+			}
+		});
 	};
-	serialize(xdoc, tree);
+	var xdoc = document.implementation.createDocument("","Article",null); // namespace, root node, doctype
+	$.each($("#root").childrenUntil("fieldset.field"),function(i,e) {
+		serializeField(e,xdoc.documentElement);
+	});
 	xdoc.documentElement.setAttributeNS('http://www.w3.org/2001/XMLSchema-instance',
-	'xsi:schemaLocation', 'http://www.nacre.com/test test.xsd')
-	return xdoc;
+			'xsi:schemaLocation', 'http://www.nacre.com/test test.xsd')
+	console.log(new XMLSerializer().serializeToString(xdoc));
+	return false;
 };

@@ -8,7 +8,7 @@
 <div class="col field-input">
 	<fieldset>
 		<input type="hidden" class="fieldid" value="${param.path}" />
-		<jsp:include page="${field.baseType}.jsp">
+		<jsp:include page="gizmos/${field.baseType}.jsp">
 			<jsp:param name="id" value="${param.path}" />
 		</jsp:include>
 	</fieldset>
