@@ -41,10 +41,8 @@ fieldset.complexContent {
 	width: 100%;
 	padding-top: 3px;
 }
-.complexContent-label {
-	width: 40%;
+legend {
 	text-transform:uppercase;
-	padding-left: 5px
 }
 .complexContent-label:first-letter {
 	font-size: 1.2em;

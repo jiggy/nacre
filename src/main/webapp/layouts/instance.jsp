@@ -4,6 +4,7 @@
 
 <c:set var="thisField" value="${field}" />
 <fieldset class="instance">
+<legend>${field.name}-${param.index}</legend>
 <c:choose>
 	<c:when test="${field.fieldType eq 'SimpleType'}">
 		<jsp:include page="simpleType.jsp">

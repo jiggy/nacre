@@ -36,10 +36,15 @@ nacre.init = function() {
 	$("#nacreForm").validate({'rules':rules});
 	$("a#Save").click(function(e) {
 		e.preventDefault();
-		var doc = nacre.serializeForm();
-		$.post("/nacre/XMLPostServlet", {xml:new XMLSerializer().serializeToString(doc)}, function(data,status,request) {
-			console.log("status: " + status);
-		});
+		if ($("#nacreForm").valid()) {
+			var doc = nacre.serializeForm();
+			console.log(new XMLSerializer().serializeToString(doc));
+			$.post("/nacre/XMLPostServlet", {xml:new XMLSerializer().serializeToString(doc)}, function(data,status,request) {
+				console.log("status: " + status);
+			});
+		} else {
+			alert("form not valid!");
+		}
 		return false;
 	});
 
@@ -95,29 +100,6 @@ nacre.nextId = function(containerId) {
 	return containerId + "[" + i + "]";
 };
 
-nacre.getInstances = function(containerId) {
-	var i = 0;
-	var fields = [];
-	while (nacre.getField(containerId + "["+i+"]").length > 0) {
-		fields.push(nacre.getField(containerId + "["+i+"]"))
-		i++;
-	}
-	return fields;
-};
-
-nacre.getAllInstances = function(path) {
-	var tokens = path.split("/");
-	var subpath = "";
-	$.each(tokens,function(idx,token) {
-		if (token == '') return;
-		subpath += "/" + token;
-		if (idx > 0) {
-			var instances = nacre.getInstances(subpath);
-			$.each(instances,function(x,i){console.log("inst:"+i.attr("id"));});
-		}
-	});
-};
-
 nacre.serializeForm = function() {
 	var serializeAttribute = function(fld, parent) {
 		var field = $(fld);
@@ -135,29 +117,32 @@ nacre.serializeForm = function() {
 		var hasAttributes = field.children("input[name=hasAttributes]").val();
 		var doc = parent.ownerDocument;
 		$.each($(fld).childrenUntil("fieldset.instance"),function(i,inst) {
+			var instance = $(inst);
 			var node = doc.createElementNS(ns, name);
 			parent.appendChild(node);
 			if (type == 'ComplexType') {
-				$.each($(inst).childrenUntil("fieldset.field"), function(j,fld) {
+				$.each(instance.childrenUntil("fieldset.field"), function(j,fld) {
 					serializeField(fld,node);
 				});
 			} else {
-				var val = $(inst).find("input.nacre-input-field").val();
+				var path = instance.find("input.fieldid").val();
+				var val = instance.find("input[name=" + path + "]").val();
 				node.appendChild(doc.createTextNode(val));
 			}
 			if (hasAttributes == 'true') {
-				$.each($(inst).childrenUntil("fieldset.attribute"),function(j,attr) {
+				$.each(instance.childrenUntil("fieldset.attribute"),function(j,attr) {
 					serializeAttribute(attr,node);
 				});
 			}
 		});
 	};
-	var xdoc = document.implementation.createDocument("","Article",null); // namespace, root node, doctype
+	var xdoc = document.implementation.createDocument("http://www.nacre.com/test","Article",null); // namespace, root node, doctype
 	$.each($("#root").childrenUntil("fieldset.field"),function(i,e) {
 		serializeField(e,xdoc.documentElement);
 	});
 	xdoc.documentElement.setAttributeNS('http://www.w3.org/2001/XMLSchema-instance',
-			'xsi:schemaLocation', 'http://www.nacre.com/test test.xsd')
-	console.log(new XMLSerializer().serializeToString(xdoc));
-	return false;
+			'xsi:schemaLocation', 'http://www.nacre.com/test')
+	xdoc.documentElement.setAttributeNS('http://www.w3.org/2001/XMLSchema-instance',
+			'xmlns:ns2', 'http://www.nacre.com/testns')
+	return xdoc;
 };

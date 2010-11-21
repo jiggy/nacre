@@ -6,12 +6,10 @@
 	<label for="${field.name}">${!empty field.decoration && !empty field.decoration.label ? field.decoration.label : field.name}${field.required ? "*" : ""}</label>
 </div>
 <div class="col field-input">
-	<fieldset>
 		<input type="hidden" class="fieldid" value="${param.path}" />
 		<jsp:include page="gizmos/${field.baseType}.jsp">
 			<jsp:param name="id" value="${param.path}" />
 		</jsp:include>
-	</fieldset>
 </div>
 </div>
 <%--<div class="simpleContent-controls col"><c:if test="${field.maxOccurs gt 1}">
@@ -19,7 +17,7 @@
 	<button class="replicate-minus" title="Remove this ${field.name}">-</button>
 </c:if></div> --%>
 <script type="text/javascript">
-rules['${field.name}'] = {
+rules['${param.path}'] = {
 	required:${field.required ? "true" : "false"}
 	<c:if test="${!empty field.minLength}">,minlength:${field.minLength}</c:if>
 	<c:if test="${!empty field.maxLength}">,maxlength:${field.maxLength}</c:if>

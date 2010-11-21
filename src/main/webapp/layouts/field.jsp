@@ -23,6 +23,7 @@
 		<c:set var="id" value="${param.path}/${field.name}" />
 			<c:forEach begin="1" end="${field.minOccurs == 0 ? 1 : field.minOccurs}" var="idx">
 				<jsp:include page="instance.jsp">
+					<jsp:param name="index" value="${idx}" />
 					<jsp:param name="path" value="${id}[${idx - 1}]" />
 				</jsp:include>
 			</c:forEach>
