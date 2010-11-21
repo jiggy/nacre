@@ -55,7 +55,13 @@ nacre.initHandlers = function() {
 	var pathToQuery = function(path) {
 		return path.replace(new RegExp(/\[.+\]/g), "");
 	};
-	$(".datepicker").datepicker();
+	$(".datepicker").datepicker({
+		onSelect: function(dateText, inst) {
+			var isodate = new Date(dateText).toISOString();
+			console.log(isodate);
+			$(this).siblings("input[name]").val(isodate);
+		}
+	});
 
 	$(".replicate-plus").click(function() {
 		var containerId = $(this).val();
